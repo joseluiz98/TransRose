@@ -130,7 +130,7 @@
         {
             if (this.descreveId.Text == "#ID")
             {
-                MessageBox.Show("Nenhum cliente cadastrado no banco de dados, por favor, cadastre um cliente para usar esta fun\x00e7\x00e3o", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                MessageBox.Show("Nenhum cliente cadastrado no banco de dados, por favor, cadastre um cliente para usar esta função", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
             }
             else
             {
@@ -400,15 +400,15 @@
                             else
                             {
                                 this.txtValContrato.Items.Clear();
-                                this.txtValContrato.Items.Add("N\x00e3o");
-                                this.txtValContrato.SelectedItem = "N\x00e3o";
+                                this.txtValContrato.Items.Add("Não");
+                                this.txtValContrato.SelectedItem = "Não";
                             }
                         }
                         reader2.Close();
                     }
                     else
                     {
-                        MessageBox.Show("N\x00e3o foram encontrados clientes com os dados especificados, tente novamente.", "Sem resultados", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                        MessageBox.Show("Não foram encontrados clientes com os dados especificados, tente novamente.", "Sem resultados", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                         reader2.Close();
                         connection2.Close();
                     }
