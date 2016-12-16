@@ -143,7 +143,7 @@
             }
             catch (Exception)
             {
-                MessageBox.Show("Erro fatal: Não foi possível iniciar a aplicação, contate o suporte pois n\x00e3o foi poss\x00edvel criar o diret\x00f3rio, contate o suporte.", "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                MessageBox.Show("Erro fatal: Não foi possível iniciar a aplicação, contate o suporte pois não foi possível criar o diret\x00f3rio, contate o suporte.", "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 Application.Exit();
             }
             try
@@ -163,23 +163,36 @@
 
         private void botaoEntrar_Click(object sender, EventArgs e)
         {
+            /// Verifica se usuário não selecionou um banco de dados válido
             if (this.recebeAno.SelectedItem == null)
             {
                 MessageBox.Show("Por favor, selecione um banco de dados", "Eita", MessageBoxButtons.OK);
             }
+            /// Se selecionou então valida demais opções
             else
             {
                 int num;
                 bool flag = int.TryParse(this.recebeAno.SelectedItem.ToString(), out num);
                 try
                 {
+                    /// Verifica se usuário solicitou a criação de novo db (novo ano)
                     if (Convert.ToString(this.recebeAno.SelectedItem) == "Novo Banco de Dados")
                     {
                         try
                         {
+                            /// Usuário selecionou 'novo ano', verifica se ano já existe
                             novoDB odb = new novoDB(ano);
                             if (odb.ShowDialog() == DialogResult.OK)
                             {
+                                string[] strArray = System.IO.File.ReadAllLines(@"C:\Windows\Temp\transrosedb\array.txt");
+                                for (int i = 0; i < strArray.Length; i++)
+                                {
+                                    if (strArray[i] == ano.ToString())
+                                    {
+                                        MessageBox.Show("Banco de dados solicitado já existe!", "Erro", MessageBoxButtons.OK);
+                                        return;
+                                    }
+                                }
                                 bool novoDb = true;
                                 StreamWriter writer = System.IO.File.AppendText(@"C:\Windows\Temp\transrosedb\array.txt");
                                 writer.WriteLine("\n" + ano);
@@ -197,16 +210,16 @@
                     else if (flag)
                     {
                         this.BaixaFiles(SplashScreen.novoDb);
-                        VerCadastros cadastros = new VerCadastros(db, ct, "", "", "");
+                        VerCadastros cadastros = new VerCadastros(ano.ToString(), db, ct, "", "", "", true);
                         base.DialogResult = DialogResult.OK;
                     }
                     else if (Convert.ToString(this.recebeAno.SelectedItem) == "Anos anteriores")
                     {
-                        MessageBox.Show("N\x00e3o existem bancos de dados de outros anos, ainda.", "Eita", MessageBoxButtons.OK);
+                        MessageBox.Show("Não existem bancos de dados de outros anos, ainda.", "Eita", MessageBoxButtons.OK);
                     }
                     else
                     {
-                        MessageBox.Show("Banco de dados inv\x00e1lido, tente novamente.", "Eita", MessageBoxButtons.OK);
+                        MessageBox.Show("Banco de dados inválido, tente novamente.", "Eita", MessageBoxButtons.OK);
                     }
                 }
                 catch (Exception exception2)
@@ -329,6 +342,7 @@
             this.Controls.Add(this.logoTransrose);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SplashScreen";
+            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SplashScreen";

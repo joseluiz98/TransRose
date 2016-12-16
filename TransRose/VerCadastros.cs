@@ -23,12 +23,14 @@
         public static string ct;
         [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static string db;
+        public static string ano;
         [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private static int idtrat;
         [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static string localizaBanco;
         [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static string localizaCont;
+        public static bool upar;
         private Button abreContrato;
         private PictureBox anteriorRegistro;
         private PictureBox atualizaCliente;
@@ -93,11 +95,16 @@
         private ToolStripMenuItem sairToolStripMenuItem;
         private ToolStripMenuItem buscarClienteToolStripMenuItem;
         private ToolStripMenuItem abrirContratoToolStripMenuItem;
+        private ToolStripMenuItem excluirBancoDeDadosAtualToolStripMenuItem;
+        private ToolStripMenuItem clienteToolStripMenuItem;
+        private ToolStripMenuItem esteBancoDeDadosToolStripMenuItem;
         private PictureBox ultimoRegistro;
 
-        public VerCadastros(string data, string contrato, string buscaID, string buscaNome, string buscaCrianca)
+        public VerCadastros(string year, string data, string contrato, string buscaID, string buscaNome, string buscaCrianca, bool up)
         {
             this.InitializeComponent();
+            upar = up;
+            ano = year;
             db = data;
             localizaBanco = @"C:\Windows\Temp\transrosedb\" + db + ".mdb";
             ct = contrato;
@@ -123,7 +130,7 @@
         {
             if (this.descreveId.Text == "#ID")
             {
-                MessageBox.Show("Nenhum registro cadastrado no banco de dados, por favor, cadastre um cliente para usar esta fun\x00e7\x00e3o", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                MessageBox.Show("Nenhum cliente cadastrado no banco de dados, por favor, cadastre um cliente para usar esta fun\x00e7\x00e3o", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
             }
             else
             {
@@ -192,42 +199,49 @@
 
         private void atualizaCliente_Click(object sender, EventArgs e)
         {
-            idtrat = Convert.ToInt32(descreveId.Text);
-            bool flag = false;
-            if (this.txtValContrato.SelectedItem.ToString() == "Ativo")
+            if(descreveId.Text == "#ID")
             {
-                flag = true;
+                MessageBox.Show("Nenhum cliente cadastrado no banco de dados!", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
             }
             else
             {
-                flag = false;
-            }
-            string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-            object[] objArray1 = new object[] { 
+                idtrat = Convert.ToInt32(descreveId.Text);
+                bool flag = false;
+                if (this.txtValContrato.SelectedItem.ToString() == "Ativo")
+                {
+                    flag = true;
+                }
+                else
+                {
+                    flag = false;
+                }
+                string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
+                object[] objArray1 = new object[] {
                 "UPDATE Cadastros SET Nome = '", txtNome.Text, "',Rua = '", txtRua.Text, "',Contrato = ", flag.ToString(), ",CPF = '", txtCPF.Text, "',RG = '", txtRG.Text, "',NumCasa = '", txtNumCasa.Text, "', Bairro = '", txtBairro.Text, "',[Telefone Fixo] = '", txtTelFixo.Text,
                 "',Celular = '", txtCel.Text, "',Criança = '", txtNomeCrianca.Text, "',[Nome da escola] = '", txtEscola.Text, "', [Rua da escola] = '", txtRuaEscola.Text, "',[Bairro da escola] = '", txtBairroEscola.Text, "',[Telefone da escola] = '", txtEscTel.Text, "',Apanha = '", txtApanha.Text, "', Entrega = '", txtEntrega.Text,
                 "' WHERE ID = ", idtrat
             };
-            string cmdText = string.Concat(objArray1);
-            OleDbConnection connection = new OleDbConnection(connectionString);
-            OleDbCommand command = new OleDbCommand(cmdText, connection);
-            try
-            {
-                connection.Open();
-                command.ExecuteNonQuery();
-                this.notifySucesso.Visible = true;
-                this.notifySucesso.ShowBalloonTip(5);
-                MessageBox.Show("Cliente atualizado com sucesso.");
-                Thread.Sleep(0x7d0);
-                this.notifySucesso.Visible = false;
-            }
-            catch (OleDbException exception)
-            {
-                MessageBox.Show("Error: " + exception.Message);
-            }
-            finally
-            {
-                connection.Close();
+                string cmdText = string.Concat(objArray1);
+                OleDbConnection connection = new OleDbConnection(connectionString);
+                OleDbCommand command = new OleDbCommand(cmdText, connection);
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    this.notifySucesso.Visible = true;
+                    this.notifySucesso.ShowBalloonTip(5);
+                    MessageBox.Show("Cliente atualizado com sucesso.");
+                    Thread.Sleep(0x7d0);
+                    this.notifySucesso.Visible = false;
+                }
+                catch (OleDbException exception)
+                {
+                    MessageBox.Show("Error: " + exception.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
             }
         }
 
@@ -425,31 +439,38 @@
 
         private void excluirRegistro_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Deseja mesmo excluir este cliente?", "Excluir", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (descreveId.Text == "#ID")
             {
-                int num = Convert.ToInt32(this.descreveId.Text);
-                string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-                string cmdText = ("DELETE FROM Cadastros WHERE ID = " + num) ?? "";
-                OleDbConnection connection = new OleDbConnection(connectionString);
-                OleDbCommand command = new OleDbCommand(cmdText, connection);
-                try
+                MessageBox.Show("Nenhum cliente cadastrado no banco de dados!", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            }
+            else
+            {
+                if (MessageBox.Show("Deseja mesmo excluir este cliente?", "Excluir", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    this.notifyDeleteSucesso.Visible = true;
-                    this.notifyDeleteSucesso.ShowBalloonTip(0);
-                    MessageBox.Show("Cliente exclu\x00eddo com sucesso.");
-                    Thread.Sleep(0x7d0);
-                    this.notifyDeleteSucesso.Visible = false;
-                }
-                catch (OleDbException exception)
-                {
-                    MessageBox.Show("Error: " + exception.Message);
-                }
-                finally
-                {
-                    connection.Close();
-                    this.ultimoCliente();
+                    int num = Convert.ToInt32(this.descreveId.Text);
+                    string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
+                    string cmdText = ("DELETE FROM Cadastros WHERE ID = " + num) ?? "";
+                    OleDbConnection connection = new OleDbConnection(connectionString);
+                    OleDbCommand command = new OleDbCommand(cmdText, connection);
+                    try
+                    {
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        this.notifyDeleteSucesso.Visible = true;
+                        this.notifyDeleteSucesso.ShowBalloonTip(0);
+                        MessageBox.Show("Cliente exclu\x00eddo com sucesso.");
+                        Thread.Sleep(0x7d0);
+                        this.notifyDeleteSucesso.Visible = false;
+                    }
+                    catch (OleDbException exception)
+                    {
+                        MessageBox.Show("Error: " + exception.Message);
+                    }
+                    finally
+                    {
+                        connection.Close();
+                        this.ultimoCliente();
+                    }
                 }
             }
         }
@@ -468,6 +489,12 @@
             this.Menu = new System.Windows.Forms.MenuStrip();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cadastrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buscarClienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.abrirContratoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.excluirBancoDeDadosAtualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.esteBancoDeDadosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sairToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sobreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyExecucao = new System.Windows.Forms.NotifyIcon(this.components);
             this.descreveId = new System.Windows.Forms.Label();
@@ -524,9 +551,6 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.sairToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buscarClienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.abrirContratoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.atualizaCliente)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.buscarRegistro)).BeginInit();
@@ -578,6 +602,7 @@
             this.cadastrosToolStripMenuItem,
             this.buscarClienteToolStripMenuItem,
             this.abrirContratoToolStripMenuItem,
+            this.excluirBancoDeDadosAtualToolStripMenuItem,
             this.sairToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
@@ -589,6 +614,50 @@
             this.cadastrosToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.cadastrosToolStripMenuItem.Text = "Cadastrar Cliente";
             this.cadastrosToolStripMenuItem.Click += new System.EventHandler(this.cadastraCliente_Click);
+            // 
+            // buscarClienteToolStripMenuItem
+            // 
+            this.buscarClienteToolStripMenuItem.Name = "buscarClienteToolStripMenuItem";
+            this.buscarClienteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.buscarClienteToolStripMenuItem.Text = "Buscar Cliente";
+            this.buscarClienteToolStripMenuItem.Click += new System.EventHandler(this.buscarRegistro_Click);
+            // 
+            // abrirContratoToolStripMenuItem
+            // 
+            this.abrirContratoToolStripMenuItem.Name = "abrirContratoToolStripMenuItem";
+            this.abrirContratoToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.abrirContratoToolStripMenuItem.Text = "Abrir Contrato";
+            this.abrirContratoToolStripMenuItem.Click += new System.EventHandler(this.abreContrato_Click);
+            // 
+            // excluirBancoDeDadosAtualToolStripMenuItem
+            // 
+            this.excluirBancoDeDadosAtualToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clienteToolStripMenuItem,
+            this.esteBancoDeDadosToolStripMenuItem});
+            this.excluirBancoDeDadosAtualToolStripMenuItem.Name = "excluirBancoDeDadosAtualToolStripMenuItem";
+            this.excluirBancoDeDadosAtualToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.excluirBancoDeDadosAtualToolStripMenuItem.Text = "Excluir";
+            // 
+            // clienteToolStripMenuItem
+            // 
+            this.clienteToolStripMenuItem.Name = "clienteToolStripMenuItem";
+            this.clienteToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.clienteToolStripMenuItem.Text = "Este Cliente";
+            this.clienteToolStripMenuItem.Click += new System.EventHandler(this.excluirRegistro_Click);
+            // 
+            // esteBancoDeDadosToolStripMenuItem
+            // 
+            this.esteBancoDeDadosToolStripMenuItem.Name = "esteBancoDeDadosToolStripMenuItem";
+            this.esteBancoDeDadosToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.esteBancoDeDadosToolStripMenuItem.Text = "Este Banco de Dados";
+            this.esteBancoDeDadosToolStripMenuItem.Click += new System.EventHandler(this.excluiBanco);
+            // 
+            // sairToolStripMenuItem
+            // 
+            this.sairToolStripMenuItem.Name = "sairToolStripMenuItem";
+            this.sairToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.sairToolStripMenuItem.Text = "Sair";
+            this.sairToolStripMenuItem.Click += new System.EventHandler(this.sairToolStripMenuItem_Click);
             // 
             // sobreToolStripMenuItem
             // 
@@ -603,7 +672,6 @@
             this.notifyExecucao.BalloonTipText = "Cadastro de Clientes - TransRose ainda em execução";
             this.notifyExecucao.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyExecucao.Icon")));
             this.notifyExecucao.Text = "Cadastro de Clientes TransRose em Execução";
-            this.notifyExecucao.Visible = true;
             this.notifyExecucao.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyCadastro_MouseDoubleClick);
             // 
             // descreveId
@@ -1168,27 +1236,6 @@
             this.pictureBox3.TabIndex = 15;
             this.pictureBox3.TabStop = false;
             // 
-            // sairToolStripMenuItem
-            // 
-            this.sairToolStripMenuItem.Name = "sairToolStripMenuItem";
-            this.sairToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.sairToolStripMenuItem.Text = "Sair";
-            this.sairToolStripMenuItem.Click += new System.EventHandler(this.sairToolStripMenuItem_Click);
-            // 
-            // buscarClienteToolStripMenuItem
-            // 
-            this.buscarClienteToolStripMenuItem.Name = "buscarClienteToolStripMenuItem";
-            this.buscarClienteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.buscarClienteToolStripMenuItem.Text = "Buscar Cliente";
-            this.buscarClienteToolStripMenuItem.Click += new System.EventHandler(this.buscarClienteToolStripMenuItem_Click);
-            // 
-            // abrirContratoToolStripMenuItem
-            // 
-            this.abrirContratoToolStripMenuItem.Name = "abrirContratoToolStripMenuItem";
-            this.abrirContratoToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-            this.abrirContratoToolStripMenuItem.Text = "Abrir Contrato";
-            this.abrirContratoToolStripMenuItem.Click += new System.EventHandler(this.abrirContratoToolStripMenuItem_Click);
-            // 
             // VerCadastros
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1355,7 +1402,7 @@
         {
             if (this.descreveId.Text == "#ID")
             {
-                MessageBox.Show("Nenhum registro cadastrado no banco de dados, por favor, cadastre um cliente para visualizá-lo", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                MessageBox.Show("Nenhum cliente cadastrado no banco de dados, por favor, cadastre um cliente para visualizá-lo", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
             }
             else
             {
@@ -1579,8 +1626,43 @@
 
         private void VerCadastros_Closing(object sender, FormClosingEventArgs e)
         {
-            UpaArquivos(db, ct);
+            upaArquivos(ref upar);
             e.Cancel = false;
+        }
+
+        private void upaArquivos(ref bool upa)
+        {
+            /// Verifica se é necessário upar contrato e db ou só fechar a aplicação
+            /// Se é necessário
+            if (upa == true)
+            {
+                UpaArquivos(db, ct);
+            }
+            /// Senão, upa apenas array
+            try
+            {
+                FtpWebRequest request;
+                request = (FtpWebRequest)WebRequest.Create(new Uri("ftp://192.168.1.101/files/array.txt"));
+                request.Method = "STOR";
+                request.Proxy = null;
+                request.UseBinary = true;
+                request.UsePassive = true;
+                request.Credentials = new NetworkCredential("", "");
+                FileInfo info3 = new FileInfo(@"C:\Windows\Temp\transrosedb\array.txt");
+                byte[] buffer3 = new byte[info3.Length];
+                using (FileStream stream5 = info3.OpenRead())
+                {
+                    stream5.Read(buffer3, 0, Convert.ToInt32(info3.Length));
+                }
+                using (Stream stream6 = request.GetRequestStream())
+                {
+                    stream6.Write(buffer3, 0, buffer3.Length);
+                }
+            }
+            catch (Exception exception3)
+            {
+                MessageBox.Show("Erro: " + exception3);
+            }
         }
 
         private void VerCadastros_Load(object sender, EventArgs e)
@@ -1612,20 +1694,69 @@
             Application.Exit();
         }
 
-        private void buscarClienteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void excluiBanco(object sender, EventArgs e)
         {
-            new BuscaClientes(this).Show();
+            string str;
+            if (MessageBox.Show("Deseja mesmo excluir o banco de dados do ano que está a ser utilizado? Esta ação não pode ser revertida!", "Excluir banco de dados do ano atual", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                ///Exclui Contrato do ano
+                str = "ftp://192.168.1.101/files/" + ct + ".doc";
+
+                ///Se funcionar excluir Banco de Dados do ano
+                if (excluiArquivo(ref str) == true)
+                {
+                    /// Exclui Banco de Dados do ano
+                    str = "ftp://192.168.1.101/files/" + db + ".mdb";
+
+                    ///Se funcionar então exclui o ano do vetor de anos da splashscreen
+                    if(excluiArquivo(ref str) == true)
+                    {
+                        /// Exclui ano do vetor
+                        string[] strArray = System.IO.File.ReadAllLines(@"C:\Windows\Temp\transrosedb\array.txt");
+                        for (int i = 0; i < strArray.Length; i++)
+                        {
+                            if (strArray[i] == ano.ToString())
+                            {
+                                strArray[i] = null;
+                            }
+                        }
+                        
+                        /// Escreve (substituindo) o novo vetor no arquivo
+                        try
+                        {
+                            StreamWriter writer = System.IO.File.CreateText(@"C:\Windows\Temp\transrosedb\array.txt");
+                            for (int i = 0; i < strArray.Length; i++)
+                            {
+                                writer.WriteLine(strArray[i]);
+                            }
+                            writer.Close();
+                        }
+                        catch (Exception exception)
+                        {
+                            MessageBox.Show("Houve um erro ao excluir o ano do menu principal, contate o suporte e informe: " + exception, "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                            Application.Exit();
+                        }
+                    }
+                }
+                upar = false;
+                Application.Exit();
+            }
         }
 
-        private void abrirContratoToolStripMenuItem_Click(object sender, EventArgs e)
+        private bool excluiArquivo(ref string str)
         {
             try
             {
-                Process.Start(localizaCont);
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(str);
+                request.Credentials = new NetworkCredential("", "");
+                request.Method = WebRequestMethods.Ftp.DeleteFile;
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                return true;
             }
-            catch (OleDbException exception)
+            catch (Exception)
             {
-                MessageBox.Show("Erro: Não foi possível abrir o contrato do cliente, contate o administrador da aplicação." + exception.Message);
+                MessageBox.Show("Erro fatal: Não foi possível realizar a operação solicitada, contate o suporte.", "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                return false;
             }
         }
 

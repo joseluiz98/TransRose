@@ -10,7 +10,7 @@
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new VerCadastros("", "", "", "", ""));
+            Application.Run(new VerCadastros("", "", "", "", "", "", true));
         }
     }
 }

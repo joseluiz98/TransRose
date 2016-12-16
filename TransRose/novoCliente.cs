@@ -136,7 +136,7 @@
                     connection.Open();
                     command.ExecuteNonQuery();
                     this.LimparCampos();
-                    new VerCadastros(db, ct, "", "", "").CarregaDados();
+                    new VerCadastros("", db, ct, "", "", "", true).CarregaDados();
                     MessageBox.Show("Cliente cadastrado com sucesso.");
                     this.notifyCadastroSucesso.Visible = true;
                     this.notifyCadastroSucesso.ShowBalloonTip(5);
@@ -827,6 +827,7 @@
             this.MinimumSize = new System.Drawing.Size(1000, 800);
             this.Name = "excluiCliente";
             this.Text = "Novo Cliente - Cadastro de Clientes - TransRose";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.voltarVerCadastros)).EndInit();
