@@ -10,6 +10,7 @@
     using System.Runtime.CompilerServices;
     using System.Threading;
     using System.Windows.Forms;
+    using TransRose;
 
     public class VerCadastros : Form
     {
@@ -98,6 +99,7 @@
         private ToolStripMenuItem excluirBancoDeDadosAtualToolStripMenuItem;
         private ToolStripMenuItem clienteToolStripMenuItem;
         private ToolStripMenuItem esteBancoDeDadosToolStripMenuItem;
+        private ToolStripMenuItem importarRegistrosToolStripMenuItem;
         private PictureBox ultimoRegistro;
 
         public VerCadastros(string year, string data, string contrato, string buscaID, string buscaNome, string buscaCrianca, bool up)
@@ -491,6 +493,7 @@
             this.cadastrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buscarClienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.abrirContratoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importarRegistrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.excluirBancoDeDadosAtualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clienteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.esteBancoDeDadosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -602,6 +605,7 @@
             this.cadastrosToolStripMenuItem,
             this.buscarClienteToolStripMenuItem,
             this.abrirContratoToolStripMenuItem,
+            this.importarRegistrosToolStripMenuItem,
             this.excluirBancoDeDadosAtualToolStripMenuItem,
             this.sairToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
@@ -611,23 +615,30 @@
             // cadastrosToolStripMenuItem
             // 
             this.cadastrosToolStripMenuItem.Name = "cadastrosToolStripMenuItem";
-            this.cadastrosToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.cadastrosToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.cadastrosToolStripMenuItem.Text = "Cadastrar Cliente";
             this.cadastrosToolStripMenuItem.Click += new System.EventHandler(this.cadastraCliente_Click);
             // 
             // buscarClienteToolStripMenuItem
             // 
             this.buscarClienteToolStripMenuItem.Name = "buscarClienteToolStripMenuItem";
-            this.buscarClienteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.buscarClienteToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.buscarClienteToolStripMenuItem.Text = "Buscar Cliente";
             this.buscarClienteToolStripMenuItem.Click += new System.EventHandler(this.buscarRegistro_Click);
             // 
             // abrirContratoToolStripMenuItem
             // 
             this.abrirContratoToolStripMenuItem.Name = "abrirContratoToolStripMenuItem";
-            this.abrirContratoToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.abrirContratoToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.abrirContratoToolStripMenuItem.Text = "Abrir Contrato";
             this.abrirContratoToolStripMenuItem.Click += new System.EventHandler(this.abreContrato_Click);
+            // 
+            // importarRegistrosToolStripMenuItem
+            // 
+            this.importarRegistrosToolStripMenuItem.Name = "importarRegistrosToolStripMenuItem";
+            this.importarRegistrosToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.importarRegistrosToolStripMenuItem.Text = "Importar Registros";
+            this.importarRegistrosToolStripMenuItem.Click += new System.EventHandler(this.incluirRegistros);
             // 
             // excluirBancoDeDadosAtualToolStripMenuItem
             // 
@@ -635,7 +646,7 @@
             this.clienteToolStripMenuItem,
             this.esteBancoDeDadosToolStripMenuItem});
             this.excluirBancoDeDadosAtualToolStripMenuItem.Name = "excluirBancoDeDadosAtualToolStripMenuItem";
-            this.excluirBancoDeDadosAtualToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.excluirBancoDeDadosAtualToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.excluirBancoDeDadosAtualToolStripMenuItem.Text = "Excluir";
             // 
             // clienteToolStripMenuItem
@@ -655,7 +666,7 @@
             // sairToolStripMenuItem
             // 
             this.sairToolStripMenuItem.Name = "sairToolStripMenuItem";
-            this.sairToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.sairToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
             this.sairToolStripMenuItem.Text = "Sair";
             this.sairToolStripMenuItem.Click += new System.EventHandler(this.sairToolStripMenuItem_Click);
             // 
@@ -1758,6 +1769,11 @@
                 MessageBox.Show("Erro fatal: Não foi possível realizar a operação solicitada, contate o suporte.", "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 return false;
             }
+        }
+
+        private void incluirRegistros(object sender, EventArgs e)
+        {
+            new incluiRegistros().Show();
         }
 
         /*public static string BuscaCrianca
