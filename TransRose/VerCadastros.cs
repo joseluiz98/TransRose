@@ -1554,7 +1554,7 @@
                 FtpWebRequest request;
                 try
                 {
-                    request = (FtpWebRequest) WebRequest.Create("ftp://192.168.1.101/files/" + db + ".mdb");
+                    request = (FtpWebRequest) WebRequest.Create("ftp://192.168.15.10/files/" + db + ".mdb");
                     request.Method = "STOR";
                     request.Proxy = null;
                     request.UseBinary = true;
@@ -1577,7 +1577,7 @@
                 }
                 try
                 {
-                    request = (FtpWebRequest) WebRequest.Create(new Uri("ftp://192.168.1.101/files/" + ct + ".doc"));
+                    request = (FtpWebRequest) WebRequest.Create(new Uri("ftp://192.168.15.10/files/" + ct + ".doc"));
                     request.Method = "STOR";
                     request.Proxy = null;
                     request.UseBinary = true;
@@ -1600,7 +1600,7 @@
                 }
                 try
                 {
-                    request = (FtpWebRequest) WebRequest.Create(new Uri("ftp://192.168.1.101/files/array.txt"));
+                    request = (FtpWebRequest) WebRequest.Create(new Uri("ftp://192.168.15.10/files/array.txt"));
                     request.Method = "STOR";
                     request.Proxy = null;
                     request.UseBinary = true;
@@ -1642,7 +1642,7 @@
             try
             {
                 FtpWebRequest request;
-                request = (FtpWebRequest)WebRequest.Create(new Uri("ftp://192.168.1.101/files/array.txt"));
+                request = (FtpWebRequest)WebRequest.Create(new Uri("ftp://192.168.15.10/files/array.txt"));
                 request.Method = "STOR";
                 request.Proxy = null;
                 request.UseBinary = true;
@@ -1700,13 +1700,13 @@
             if (MessageBox.Show("Deseja mesmo excluir o banco de dados do ano que está a ser utilizado? Esta ação não pode ser revertida!", "Excluir banco de dados do ano atual", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 ///Exclui Contrato do ano
-                str = "ftp://192.168.1.101/files/" + ct + ".doc";
+                str = "ftp://192.168.15.10/files/" + ct + ".doc";
 
                 ///Se funcionar excluir Banco de Dados do ano
                 if (excluiArquivo(ref str) == true)
                 {
                     /// Exclui Banco de Dados do ano
-                    str = "ftp://192.168.1.101/files/" + db + ".mdb";
+                    str = "ftp://192.168.15.10/files/" + db + ".mdb";
 
                     ///Se funcionar então exclui o ano do vetor de anos da splashscreen
                     if(excluiArquivo(ref str) == true)

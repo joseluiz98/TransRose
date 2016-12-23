@@ -75,7 +75,7 @@
                 try
                 {
                     WebClient client = new WebClient();
-                    byte[] buffer = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.1.101/files/" + db + ".mdb");
+                    byte[] buffer = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.15.10/files/" + db + ".mdb");
                     FileStream stream = System.IO.File.Create(@"C:\Windows\Temp\transrosedb\" + db + ".mdb");
                     stream.Write(buffer, 0, buffer.Length);
                     stream.Close();
@@ -88,7 +88,7 @@
                 try
                 {
                     WebClient client3 = new WebClient();
-                    byte[] buffer2 = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.1.101/files/" + ct + ".doc");
+                    byte[] buffer2 = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.15.10/files/" + ct + ".doc");
                     FileStream stream2 = System.IO.File.Create(@"C:\Windows\Temp\transrosedb\" + ct + ".doc");
                     stream2.Write(buffer2, 0, buffer2.Length);
                     stream2.Close();
@@ -106,7 +106,7 @@
                 try
                 {
                     WebClient client5 = new WebClient();
-                    byte[] buffer3 = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.1.101/files/db2016.mdb");
+                    byte[] buffer3 = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.15.10/files/db2016.mdb");
                     FileStream stream3 = System.IO.File.Create(@"C:\Windows\Temp\transrosedb\" + db + ".mdb");
                     stream3.Write(buffer3, 0, buffer3.Length);
                     stream3.Close();
@@ -120,7 +120,7 @@
                 try
                 {
                     WebClient client7 = new WebClient();
-                    byte[] buffer4 = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.1.101/files/ct2016.doc");
+                    byte[] buffer4 = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.15.10/files/ct2016.doc");
                     FileStream stream4 = System.IO.File.Create(@"C:\Windows\Temp\transrosedb\" + ct + ".doc");
                     stream4.Write(buffer4, 0, buffer4.Length);
                     stream4.Close();
@@ -149,7 +149,7 @@
             try
             {
                 WebClient client = new WebClient();
-                byte[] buffer = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.1.101/files/array.txt");
+                byte[] buffer = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.15.10/files/array.txt");
                 FileStream stream = System.IO.File.Create(@"C:\Windows\Temp\transrosedb\array.txt");
                 stream.Write(buffer, 0, buffer.Length);
                 stream.Close();
