@@ -28,7 +28,7 @@
     <PublisherName>Magalhães &amp; Silva LTDA</PublisherName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>2.7.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -54,10 +54,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>75537ABF4F6C7F8AF1A7A0E96E761DE2F2E8DB88</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>6A6DAB942B8068B8BC41426FD0F4A6BE3D62C087</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>TransRose_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>TransRose_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -69,6 +69,34 @@
     <ApplicationIcon>bus.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Google.Apis, Version=1.30.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.30.0\lib\net45\Google.Apis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Auth, Version=1.30.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.30.0\lib\net45\Google.Apis.Auth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Auth.PlatformServices, Version=1.30.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Auth.1.30.0\lib\net45\Google.Apis.Auth.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Core, Version=1.30.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Core.1.30.0\lib\net45\Google.Apis.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.Drive.v3, Version=1.30.0.1016, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.Drive.v3.1.30.0.1016\lib\net45\Google.Apis.Drive.v3.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Apis.PlatformServices, Version=1.30.0.0, Culture=neutral, PublicKeyToken=4b01fa6e34db77ab, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Apis.1.30.0\lib\net45\Google.Apis.PlatformServices.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -85,14 +113,15 @@
     <Compile Include="AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BuscaClientes.cs">
+    <Compile Include="buscaClientes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="incluiRegistros.cs">
+    <Compile Include="manipulaArquivos.cs" />
+    <Compile Include="ConstruindoincluiRegistros.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="incluiRegistros.Designer.cs">
-      <DependentUpon>incluiRegistros.cs</DependentUpon>
+    <Compile Include="ConstruindoincluiRegistros.Designer.cs">
+      <DependentUpon>ConstruindoincluiRegistros.cs</DependentUpon>
     </Compile>
     <Compile Include="novoCliente.cs">
       <SubType>Form</SubType>
@@ -114,11 +143,11 @@
     <Compile Include="VerCadastros.cs">
       <SubType>Form</SubType>
     </Compile>
-    <EmbeddedResource Include="BuscaClientes.resx">
-      <DependentUpon>BuscaClientes.cs</DependentUpon>
+    <EmbeddedResource Include="buscaClientes.resx">
+      <DependentUpon>buscaClientes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="incluiRegistros.resx">
-      <DependentUpon>incluiRegistros.cs</DependentUpon>
+    <EmbeddedResource Include="ConstruindoincluiRegistros.resx">
+      <DependentUpon>ConstruindoincluiRegistros.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="novoCliente.resx">
       <DependentUpon>novoCliente.cs</DependentUpon>
@@ -142,6 +171,10 @@
     <EmbeddedResource Include="VerCadastros.resx">
       <DependentUpon>VerCadastros.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="client_secret.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -151,6 +184,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="TransRose_1_TemporaryKey.pfx" />
     <None Include="TransRose_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

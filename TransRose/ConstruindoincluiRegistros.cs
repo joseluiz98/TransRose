@@ -11,10 +11,10 @@ using System.Threading;
 
 namespace TransRose
 {
-    public partial class incluiRegistros : Form
+    public partial class ConstruindoincluiRegistro : Form
     {
 
-        public incluiRegistros()
+        public ConstruindoincluiRegistro()
         {
             InitializeComponent();
 

@@ -9,7 +9,6 @@
 
     internal class AboutBox : Form
     {
-        private IContainer components = null;
         private Label labelCompanyName;
         private Label labelCopyright;
         private Label labelProductName;

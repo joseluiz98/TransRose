@@ -14,24 +14,12 @@
 
     public class VerCadastros : Form
     {
-        [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static string BuscaCrianca;
-        [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static string BuscaID;
-        [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static string BuscaNome;
-        [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static string ct;
-        [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static string db;
-        public static string ano;
-        [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private static int idtrat;
-        [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public static string localizaBanco;
-        [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public static string localizaCont;
-        public static bool upar;
+        public static string localizaContrato;
         private Button abreContrato;
         private PictureBox anteriorRegistro;
         private PictureBox atualizaCliente;
@@ -40,32 +28,32 @@
         private ToolStripMenuItem cadastrosToolStripMenuItem;
         private ColorDialog colorDialog1;
         private IContainer components = null;
-        private Label descreveApanha;
-        private Label descreveBairro;
-        private Label descreveBairroEscola;
-        private Label descreveCasa;
-        private Label descreveCel;
-        private Label descreveCPF;
-        private Label descreveCrianca;
-        private Label descreveEntrega;
-        private Label descreveEscola;
-        private Label descreveEscTel;
-        private Label descreveId;
-        private Label descreveNome;
-        private Label descreveParcela;
-        private Label descreveRG;
-        private Label descreveRua;
-        private Label descreveRuaEscola;
-        private Label descreveTelFixo;
-        private Label descreveValContrato;
+        private Label lbDescreveApanha;
+        private Label lbDescreveBairro;
+        private Label lbDescreveBairroEscola;
+        private Label lbDescreveCasa;
+        private Label lbDescreveCel;
+        private Label lbDescreveCPF;
+        private Label lbDescreveCrianca;
+        private Label lbDescreveEntrega;
+        private Label lbDescreveEscola;
+        private Label lbDescreveEscTel;
+        private Label lbDescreveId;
+        private Label lbDescreveNome;
+        private Label lbDescreveParcela;
+        private Label lbDescreveRG;
+        private Label lbDescreveRua;
+        private Label lbDescreveRuaEscola;
+        private Label lbDescreveTelFixo;
+        private Label lbDescreveValContrato;
         private ToolStripMenuItem editToolStripMenuItem;
         private PictureBox excluirRegistro;
         private Label label3;
-        private MenuStrip Menu;
+        private new MenuStrip Menu;
         private NotifyIcon notifyDeleteSucesso;
         private NotifyIcon notifyExecucao;
         private NotifyIcon notifySucesso;
-        private PictureBox pictureBox1;
+        private PictureBox picLogoTransRose;
         private PictureBox pictureBox2;
         private PictureBox pictureBox3;
         private PictureBox primeiroRegistro;
@@ -101,385 +89,23 @@
         private ToolStripMenuItem esteBancoDeDadosToolStripMenuItem;
         private ToolStripMenuItem importarRegistrosToolStripMenuItem;
         private PictureBox ultimoRegistro;
+        private static manipulaArquivos contexto;
+        public static bool clicouSair;
 
-        public VerCadastros(string year, string data, string contrato, string buscaID, string buscaNome, string buscaCrianca, bool up)
+        public VerCadastros()
         {
             this.InitializeComponent();
-            upar = up;
-            ano = year;
-            db = data;
-            localizaBanco = @"C:\Windows\Temp\transrosedb\" + db + ".mdb";
-            ct = contrato;
-            localizaCont = @"C:\Windows\Temp\transrosedb\" + ct + ".doc";
+        }
+
+        public VerCadastros(manipulaArquivos Contexto, string buscaID, string buscaNome, string buscaCrianca)
+        {
+            this.InitializeComponent();
+            contexto = Contexto;
+            localizaBanco = @"C:\Windows\Temp\transrosedb\db" + contexto.ano + ".mdb";
+            localizaContrato = @"C:\Windows\Temp\transrosedb\ct" + contexto.ano + ".doc";
             BuscaID = buscaID;
             BuscaNome = buscaNome;
             BuscaCrianca = buscaCrianca;
-        }
-
-        private void abreContrato_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Process.Start(localizaCont);
-            }
-            catch (OleDbException exception)
-            {
-                MessageBox.Show("Erro: Não foi possível abrir o contrato do cliente, contate o administrador da aplicação." + exception.Message);
-            }
-        }
-
-        private void anteriorRegistro_Click(object sender, EventArgs e)
-        {
-            if (this.descreveId.Text == "#ID")
-            {
-                MessageBox.Show("Nenhum cliente cadastrado no banco de dados, por favor, cadastre um cliente para usar esta função", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-            }
-            else
-            {
-                int num = Convert.ToInt32(this.descreveId.Text);
-                string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-                string cmdText = "SELECT TOP 1 * FROM Cadastros WHERE ID < " + num + " order by ID DESC";
-                OleDbConnection connection = new OleDbConnection(connectionString);
-                OleDbCommand command = new OleDbCommand(cmdText, connection);
-                try
-                {
-                    connection.Open();
-                    OleDbDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        this.descreveId.Text = Convert.ToInt32(reader["ID"]).ToString();
-                        this.txtNome.Text = reader["Nome"].ToString();
-                        this.txtRua.Text = reader["Rua"].ToString();
-                        this.txtNumCasa.Text = reader["NumCasa"].ToString();
-                        this.txtBairro.Text = reader["Bairro"].ToString();
-                        this.txtRG.Text = reader["RG"].ToString();
-                        this.txtCPF.Text = reader["CPF"].ToString();
-                        this.txtTelFixo.Text = reader["Telefone Fixo"].ToString();
-                        this.txtCel.Text = reader["Celular"].ToString();
-                        this.txtValContrato.Items.Add(reader["Contrato"].ToString());
-                        this.txtValContrato.SelectedItem = reader["Contrato"].ToString();
-                        this.txtParcela.Text = "R$" + reader["Parcela"] + " Reais".ToString();
-                        this.txtTotalAno.Text = "R$" + reader["Valor Anual"] + " Reais".ToString();
-                        this.txtNomeCrianca.Text = reader["Criança"].ToString();
-                        this.txtEscola.Text = reader["Nome da escola"].ToString();
-                        this.txtRuaEscola.Text = reader["Rua da escola"].ToString();
-                        this.txtBairroEscola.Text = reader["Bairro da escola"].ToString();
-                        this.txtEscTel.Text = reader["Telefone da escola"].ToString();
-                        this.txtApanha.Text = reader["Apanha"] + " Hrs.".ToString();
-                        this.txtEntrega.Text = reader["Entrega"] + " Hrs.".ToString();
-                        if (this.txtValContrato.SelectedItem.ToString() == "True")
-                        {
-                            this.txtValContrato.Items.Clear();
-                            this.txtValContrato.Items.Add("Ativo");
-                            this.txtValContrato.SelectedItem = "Ativo";
-                        }
-                        else
-                        {
-                            this.txtValContrato.Items.Clear();
-                            this.txtValContrato.Items.Add("Inativo");
-                            this.txtValContrato.SelectedItem = "Inativo";
-                        }
-                        if (Convert.ToInt32(this.descreveId.Text) < num)
-                        {
-                            reader.Close();
-                            connection.Close();
-                            return;
-                        }
-                    }
-                    reader.Close();
-                }
-                catch (OleDbException exception)
-                {
-                    MessageBox.Show("Error: " + exception.Message);
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-        }
-
-        private void atualizaCliente_Click(object sender, EventArgs e)
-        {
-            if(descreveId.Text == "#ID")
-            {
-                MessageBox.Show("Nenhum cliente cadastrado no banco de dados!", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-            }
-            else
-            {
-                idtrat = Convert.ToInt32(descreveId.Text);
-                bool flag = false;
-                if (this.txtValContrato.SelectedItem.ToString() == "Ativo")
-                {
-                    flag = true;
-                }
-                else
-                {
-                    flag = false;
-                }
-                string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-                object[] objArray1 = new object[] {
-                "UPDATE Cadastros SET Nome = '", txtNome.Text, "',Rua = '", txtRua.Text, "',Contrato = ", flag.ToString(), ",CPF = '", txtCPF.Text, "',RG = '", txtRG.Text, "',NumCasa = '", txtNumCasa.Text, "', Bairro = '", txtBairro.Text, "',[Telefone Fixo] = '", txtTelFixo.Text,
-                "',Celular = '", txtCel.Text, "',Criança = '", txtNomeCrianca.Text, "',[Nome da escola] = '", txtEscola.Text, "', [Rua da escola] = '", txtRuaEscola.Text, "',[Bairro da escola] = '", txtBairroEscola.Text, "',[Telefone da escola] = '", txtEscTel.Text, "',Apanha = '", txtApanha.Text, "', Entrega = '", txtEntrega.Text,
-                "' WHERE ID = ", idtrat
-            };
-                string cmdText = string.Concat(objArray1);
-                OleDbConnection connection = new OleDbConnection(connectionString);
-                OleDbCommand command = new OleDbCommand(cmdText, connection);
-                try
-                {
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    this.notifySucesso.Visible = true;
-                    this.notifySucesso.ShowBalloonTip(5);
-                    MessageBox.Show("Cliente atualizado com sucesso.");
-                    Thread.Sleep(0x7d0);
-                    this.notifySucesso.Visible = false;
-                }
-                catch (OleDbException exception)
-                {
-                    MessageBox.Show("Error: " + exception.Message);
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-        }
-
-        public void buscarRegistro_Click(object sender, EventArgs e)
-        {
-            new BuscaClientes(this).Show();
-        }
-
-        private void cadastraCliente_Click(object sender, EventArgs e)
-        {
-            new excluiCliente(db, ct).Show();
-        }
-
-        private void cadastrosToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        public void CarregaDados()
-        {
-            if (((BuscaID.ToString() == "") & (BuscaNome == "")) & (BuscaCrianca == ""))
-            {
-                string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-                string cmdText = "SELECT *FROM Cadastros WHERE ID IS NOT NULL order by ID ASC";
-                OleDbConnection connection = new OleDbConnection(connectionString);
-                OleDbCommand command = new OleDbCommand(cmdText, connection);
-                try
-                {
-                    connection.Open();
-                    OleDbDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        this.descreveId.Text = Convert.ToInt32(reader["ID"]).ToString();
-                        this.txtNome.Text = reader["Nome"].ToString();
-                        this.txtRua.Text = reader["Rua"].ToString();
-                        this.txtNumCasa.Text = reader["NumCasa"].ToString();
-                        this.txtBairro.Text = reader["Bairro"].ToString();
-                        this.txtRG.Text = reader["RG"].ToString();
-                        this.txtCPF.Text = reader["CPF"].ToString();
-                        this.txtTelFixo.Text = reader["Telefone Fixo"].ToString();
-                        this.txtCel.Text = reader["Celular"].ToString();
-                        this.txtValContrato.Items.Add(reader["Contrato"].ToString());
-                        this.txtValContrato.SelectedItem = reader["Contrato"].ToString();
-                        this.txtParcela.Text = "R$" + reader["Parcela"] + " Reais".ToString();
-                        this.txtTotalAno.Text = "R$" + reader["Valor Anual"] + " Reais".ToString();
-                        this.txtNomeCrianca.Text = reader["Criança"].ToString();
-                        this.txtEscola.Text = reader["Nome da escola"].ToString();
-                        this.txtRuaEscola.Text = reader["Rua da escola"].ToString();
-                        this.txtBairroEscola.Text = reader["Bairro da escola"].ToString();
-                        this.txtEscTel.Text = reader["Telefone da escola"].ToString();
-                        this.txtApanha.Text = reader["Apanha"] + " Hrs.".ToString();
-                        this.txtEntrega.Text = reader["Entrega"] + " Hrs.".ToString();
-                        if (this.txtValContrato.SelectedItem.ToString() == "True")
-                        {
-                            this.txtValContrato.Items.Clear();
-                            this.txtValContrato.Items.Add("Ativo");
-                            this.txtValContrato.Items.Add("Inativo");
-                            this.txtValContrato.SelectedItem = "Ativo";
-                        }
-                        else
-                        {
-                            this.txtValContrato.Items.Clear();
-                            this.txtValContrato.Items.Add("Ativo");
-                            this.txtValContrato.Items.Add("Inativo");
-                            this.txtValContrato.SelectedItem = "Inativo";
-                        }
-                        reader.Close();
-                        connection.Close();
-                        return;
-                    }
-                    reader.Close();
-                }
-                catch (OleDbException exception)
-                {
-                    MessageBox.Show("Error: " + exception.Message);
-                }
-                finally
-                {
-                    connection.Close();
-                }
-            }
-            else
-            {
-                string str3 = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-                string str4 = "";
-                if (BuscaID != "")
-                {
-                    idtrat = Convert.ToInt32(BuscaID);
-                }
-                if (((BuscaID != "") & (BuscaNome != "")) & (BuscaCrianca != ""))
-                {
-                    object[] objArray1 = new object[] { "SELECT *FROM Cadastros WHERE ID = ", idtrat, " AND Nome LIKE '%", BuscaNome, "%' AND Criança LIKE '%", BuscaCrianca, "%'" };
-                    str4 = string.Concat(objArray1);
-                }
-                else if (((BuscaID != "") & (BuscaNome == "")) & (BuscaCrianca == ""))
-                {
-                    str4 = ("SELECT *FROM Cadastros WHERE ID = " + idtrat) ?? "";
-                }
-                else if (((BuscaID == "") & (BuscaNome != "")) & (BuscaCrianca == ""))
-                {
-                    str4 = "SELECT *FROM Cadastros WHERE Nome LIKE '%" + BuscaNome + "%'";
-                }
-                else if (((BuscaID == "") & (BuscaNome == "")) & (BuscaCrianca != ""))
-                {
-                    str4 = "SELECT *FROM Cadastros WHERE Criança LIKE '%" + BuscaCrianca + "%'";
-                }
-                else if (((BuscaID != "") & (BuscaNome != "")) & (BuscaCrianca == ""))
-                {
-                    object[] objArray2 = new object[] { "SELECT *FROM Cadastros WHERE ID = ", idtrat, " AND Nome LIKE '%", BuscaNome, "%'" };
-                    str4 = string.Concat(objArray2);
-                }
-                else if (((BuscaID != "") & (BuscaNome == "")) & (BuscaCrianca != ""))
-                {
-                    object[] objArray3 = new object[] { "SELECT *FROM Cadastros WHERE ID = ", idtrat, " AND Criança LIKE '%", BuscaCrianca, "%'" };
-                    str4 = string.Concat(objArray3);
-                }
-                else if (((BuscaID == "") & (BuscaNome != "")) & (BuscaCrianca != ""))
-                {
-                    string[] textArray1 = new string[] { "SELECT *FROM Cadastros WHERE Nome LIKE '%", BuscaNome, "%' AND Criança LIKE '%", BuscaCrianca, "%'" };
-                    str4 = string.Concat(textArray1);
-                }
-                OleDbConnection connection2 = new OleDbConnection(str3);
-                OleDbCommand command2 = new OleDbCommand(str4, connection2);
-                try
-                {
-                    connection2.Open();
-                    OleDbDataReader reader2 = command2.ExecuteReader();
-                    if (reader2.HasRows)
-                    {
-                        while (reader2.Read())
-                        {
-                            this.descreveId.Text = Convert.ToInt32(reader2["ID"]).ToString();
-                            this.txtNome.Text = reader2["Nome"].ToString();
-                            this.txtRua.Text = reader2["Rua"].ToString();
-                            this.txtNumCasa.Text = reader2["NumCasa"].ToString();
-                            this.txtBairro.Text = reader2["Bairro"].ToString();
-                            this.txtRG.Text = reader2["RG"].ToString();
-                            this.txtCPF.Text = reader2["CPF"].ToString();
-                            this.txtTelFixo.Text = reader2["Telefone Fixo"].ToString();
-                            this.txtCel.Text = reader2["Celular"].ToString();
-                            this.txtValContrato.Items.Add(reader2["Contrato"].ToString());
-                            this.txtValContrato.SelectedItem = reader2["Contrato"].ToString();
-                            this.txtParcela.Text = "R$" + reader2["Parcela"] + " Reais".ToString();
-                            this.txtTotalAno.Text = "R$" + reader2["Valor Anual"] + " Reais".ToString();
-                            this.txtNomeCrianca.Text = reader2["Criança"].ToString();
-                            this.txtEscola.Text = reader2["Nome da escola"].ToString();
-                            this.txtRuaEscola.Text = reader2["Rua da escola"].ToString();
-                            this.txtBairroEscola.Text = reader2["Bairro da escola"].ToString();
-                            this.txtApanha.Text = reader2["Apanha"] + " Hrs.".ToString();
-                            this.txtEntrega.Text = reader2["Entrega"] + " Hrs.".ToString();
-                            if (this.txtValContrato.SelectedItem.ToString() == "True")
-                            {
-                                this.txtValContrato.Items.Clear();
-                                this.txtValContrato.Items.Add("Sim");
-                                this.txtValContrato.SelectedItem = "Sim";
-                            }
-                            else
-                            {
-                                this.txtValContrato.Items.Clear();
-                                this.txtValContrato.Items.Add("Não");
-                                this.txtValContrato.SelectedItem = "Não";
-                            }
-                        }
-                        reader2.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Não foram encontrados clientes com os dados especificados, tente novamente.", "Sem resultados", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                        reader2.Close();
-                        connection2.Close();
-                    }
-                }
-                catch (OleDbException exception2)
-                {
-                    MessageBox.Show("Error: " + exception2.Message);
-                }
-                finally
-                {
-                    connection2.Close();
-                }
-            }
-        }
-
-        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
-        {
-        }
-
-        /*protected override void Dispose(bool disposing)
-        {
-            if (disposing && (this.components > null))
-            {
-                this.components.Dispose();
-            }
-            base.Dispose(disposing);
-        }*/
-
-        private void excluirRegistro_Click(object sender, EventArgs e)
-        {
-            if (descreveId.Text == "#ID")
-            {
-                MessageBox.Show("Nenhum cliente cadastrado no banco de dados!", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-            }
-            else
-            {
-                if (MessageBox.Show("Deseja mesmo excluir este cliente?", "Excluir", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    int num = Convert.ToInt32(this.descreveId.Text);
-                    string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-                    string cmdText = ("DELETE FROM Cadastros WHERE ID = " + num) ?? "";
-                    OleDbConnection connection = new OleDbConnection(connectionString);
-                    OleDbCommand command = new OleDbCommand(cmdText, connection);
-                    try
-                    {
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                        this.notifyDeleteSucesso.Visible = true;
-                        this.notifyDeleteSucesso.ShowBalloonTip(0);
-                        MessageBox.Show("Cliente exclu\x00eddo com sucesso.");
-                        Thread.Sleep(0x7d0);
-                        this.notifyDeleteSucesso.Visible = false;
-                    }
-                    catch (OleDbException exception)
-                    {
-                        MessageBox.Show("Error: " + exception.Message);
-                    }
-                    finally
-                    {
-                        connection.Close();
-                        this.ultimoCliente();
-                    }
-                }
-            }
-        }
-
-        private void exitButton_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
         }
 
         private void InitializeComponent()
@@ -487,7 +113,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VerCadastros));
             this.txtNome = new System.Windows.Forms.TextBox();
-            this.descreveNome = new System.Windows.Forms.Label();
+            this.lbDescreveNome = new System.Windows.Forms.Label();
             this.Menu = new System.Windows.Forms.MenuStrip();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cadastrosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -500,43 +126,43 @@
             this.sairToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sobreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyExecucao = new System.Windows.Forms.NotifyIcon(this.components);
-            this.descreveId = new System.Windows.Forms.Label();
+            this.lbDescreveId = new System.Windows.Forms.Label();
             this.notifyDeleteSucesso = new System.Windows.Forms.NotifyIcon(this.components);
-            this.descreveRua = new System.Windows.Forms.Label();
+            this.lbDescreveRua = new System.Windows.Forms.Label();
             this.txtRua = new System.Windows.Forms.TextBox();
-            this.descreveCasa = new System.Windows.Forms.Label();
+            this.lbDescreveCasa = new System.Windows.Forms.Label();
             this.txtNumCasa = new System.Windows.Forms.TextBox();
-            this.descreveBairro = new System.Windows.Forms.Label();
+            this.lbDescreveBairro = new System.Windows.Forms.Label();
             this.txtBairro = new System.Windows.Forms.TextBox();
-            this.descreveRG = new System.Windows.Forms.Label();
+            this.lbDescreveRG = new System.Windows.Forms.Label();
             this.txtRG = new System.Windows.Forms.TextBox();
-            this.descreveCPF = new System.Windows.Forms.Label();
+            this.lbDescreveCPF = new System.Windows.Forms.Label();
             this.TituloDadosResponsavel = new System.Windows.Forms.Label();
-            this.descreveTelFixo = new System.Windows.Forms.Label();
-            this.descreveCel = new System.Windows.Forms.Label();
-            this.descreveValContrato = new System.Windows.Forms.Label();
+            this.lbDescreveTelFixo = new System.Windows.Forms.Label();
+            this.lbDescreveCel = new System.Windows.Forms.Label();
+            this.lbDescreveValContrato = new System.Windows.Forms.Label();
             this.TituloDadosdoContrato = new System.Windows.Forms.Label();
             this.txtValContrato = new System.Windows.Forms.ComboBox();
-            this.descreveParcela = new System.Windows.Forms.Label();
+            this.lbDescreveParcela = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.TituloDadosServico = new System.Windows.Forms.Label();
-            this.descreveCrianca = new System.Windows.Forms.Label();
+            this.lbDescreveCrianca = new System.Windows.Forms.Label();
             this.txtNomeCrianca = new System.Windows.Forms.TextBox();
             this.txtEscola = new System.Windows.Forms.TextBox();
-            this.descreveEscola = new System.Windows.Forms.Label();
+            this.lbDescreveEscola = new System.Windows.Forms.Label();
             this.txtRuaEscola = new System.Windows.Forms.TextBox();
-            this.descreveRuaEscola = new System.Windows.Forms.Label();
+            this.lbDescreveRuaEscola = new System.Windows.Forms.Label();
             this.txtBairroEscola = new System.Windows.Forms.TextBox();
-            this.descreveBairroEscola = new System.Windows.Forms.Label();
-            this.descreveApanha = new System.Windows.Forms.Label();
+            this.lbDescreveBairroEscola = new System.Windows.Forms.Label();
+            this.lbDescreveApanha = new System.Windows.Forms.Label();
             this.TituloHorarios = new System.Windows.Forms.Label();
-            this.descreveEntrega = new System.Windows.Forms.Label();
+            this.lbDescreveEntrega = new System.Windows.Forms.Label();
             this.abreContrato = new System.Windows.Forms.Button();
             this.txtApanha = new System.Windows.Forms.MaskedTextBox();
             this.txtEntrega = new System.Windows.Forms.MaskedTextBox();
             this.notifySucesso = new System.Windows.Forms.NotifyIcon(this.components);
             this.txtEscTel = new System.Windows.Forms.MaskedTextBox();
-            this.descreveEscTel = new System.Windows.Forms.Label();
+            this.lbDescreveEscTel = new System.Windows.Forms.Label();
             this.txtCel = new System.Windows.Forms.MaskedTextBox();
             this.txtTelFixo = new System.Windows.Forms.MaskedTextBox();
             this.txtCPF = new System.Windows.Forms.MaskedTextBox();
@@ -552,7 +178,7 @@
             this.excluirRegistro = new System.Windows.Forms.PictureBox();
             this.proximoRegistro = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.picLogoTransRose = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.atualizaCliente)).BeginInit();
@@ -564,7 +190,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.excluirRegistro)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.proximoRegistro)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogoTransRose)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
@@ -578,15 +204,15 @@
             this.txtNome.Size = new System.Drawing.Size(250, 20);
             this.txtNome.TabIndex = 2;
             // 
-            // descreveNome
+            // lbDescreveNome
             // 
-            this.descreveNome.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveNome.AutoSize = true;
-            this.descreveNome.Location = new System.Drawing.Point(18, 257);
-            this.descreveNome.Name = "descreveNome";
-            this.descreveNome.Size = new System.Drawing.Size(38, 13);
-            this.descreveNome.TabIndex = 4;
-            this.descreveNome.Text = "Nome:";
+            this.lbDescreveNome.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveNome.AutoSize = true;
+            this.lbDescreveNome.Location = new System.Drawing.Point(18, 257);
+            this.lbDescreveNome.Name = "lbDescreveNome";
+            this.lbDescreveNome.Size = new System.Drawing.Size(38, 13);
+            this.lbDescreveNome.TabIndex = 4;
+            this.lbDescreveNome.Text = "Nome:";
             // 
             // Menu
             // 
@@ -685,15 +311,15 @@
             this.notifyExecucao.Text = "Cadastro de Clientes TransRose em Execução";
             this.notifyExecucao.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyCadastro_MouseDoubleClick);
             // 
-            // descreveId
+            // lbDescreveId
             // 
-            this.descreveId.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveId.AutoSize = true;
-            this.descreveId.Location = new System.Drawing.Point(160, 46);
-            this.descreveId.Name = "descreveId";
-            this.descreveId.Size = new System.Drawing.Size(25, 13);
-            this.descreveId.TabIndex = 1;
-            this.descreveId.Text = "#ID";
+            this.lbDescreveId.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveId.AutoSize = true;
+            this.lbDescreveId.Location = new System.Drawing.Point(160, 46);
+            this.lbDescreveId.Name = "lbDescreveId";
+            this.lbDescreveId.Size = new System.Drawing.Size(25, 13);
+            this.lbDescreveId.TabIndex = 1;
+            this.lbDescreveId.Text = "#ID";
             // 
             // notifyDeleteSucesso
             // 
@@ -701,15 +327,15 @@
             this.notifyDeleteSucesso.BalloonTipText = "Cliente deletado com sucesso";
             this.notifyDeleteSucesso.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyDeleteSucesso.Icon")));
             // 
-            // descreveRua
+            // lbDescreveRua
             // 
-            this.descreveRua.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveRua.AutoSize = true;
-            this.descreveRua.Location = new System.Drawing.Point(18, 291);
-            this.descreveRua.Name = "descreveRua";
-            this.descreveRua.Size = new System.Drawing.Size(30, 13);
-            this.descreveRua.TabIndex = 24;
-            this.descreveRua.Text = "Rua:";
+            this.lbDescreveRua.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveRua.AutoSize = true;
+            this.lbDescreveRua.Location = new System.Drawing.Point(18, 291);
+            this.lbDescreveRua.Name = "lbDescreveRua";
+            this.lbDescreveRua.Size = new System.Drawing.Size(30, 13);
+            this.lbDescreveRua.TabIndex = 24;
+            this.lbDescreveRua.Text = "Rua:";
             // 
             // txtRua
             // 
@@ -721,15 +347,15 @@
             this.txtRua.Size = new System.Drawing.Size(250, 20);
             this.txtRua.TabIndex = 25;
             // 
-            // descreveCasa
+            // lbDescreveCasa
             // 
-            this.descreveCasa.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveCasa.AutoSize = true;
-            this.descreveCasa.Location = new System.Drawing.Point(18, 321);
-            this.descreveCasa.Name = "descreveCasa";
-            this.descreveCasa.Size = new System.Drawing.Size(47, 13);
-            this.descreveCasa.TabIndex = 26;
-            this.descreveCasa.Text = "Número:";
+            this.lbDescreveCasa.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveCasa.AutoSize = true;
+            this.lbDescreveCasa.Location = new System.Drawing.Point(18, 321);
+            this.lbDescreveCasa.Name = "lbDescreveCasa";
+            this.lbDescreveCasa.Size = new System.Drawing.Size(47, 13);
+            this.lbDescreveCasa.TabIndex = 26;
+            this.lbDescreveCasa.Text = "Número:";
             // 
             // txtNumCasa
             // 
@@ -741,15 +367,15 @@
             this.txtNumCasa.Size = new System.Drawing.Size(250, 20);
             this.txtNumCasa.TabIndex = 27;
             // 
-            // descreveBairro
+            // lbDescreveBairro
             // 
-            this.descreveBairro.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveBairro.AutoSize = true;
-            this.descreveBairro.Location = new System.Drawing.Point(18, 351);
-            this.descreveBairro.Name = "descreveBairro";
-            this.descreveBairro.Size = new System.Drawing.Size(37, 13);
-            this.descreveBairro.TabIndex = 28;
-            this.descreveBairro.Text = "Bairro:";
+            this.lbDescreveBairro.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveBairro.AutoSize = true;
+            this.lbDescreveBairro.Location = new System.Drawing.Point(18, 351);
+            this.lbDescreveBairro.Name = "lbDescreveBairro";
+            this.lbDescreveBairro.Size = new System.Drawing.Size(37, 13);
+            this.lbDescreveBairro.TabIndex = 28;
+            this.lbDescreveBairro.Text = "Bairro:";
             // 
             // txtBairro
             // 
@@ -761,15 +387,15 @@
             this.txtBairro.Size = new System.Drawing.Size(250, 20);
             this.txtBairro.TabIndex = 29;
             // 
-            // descreveRG
+            // lbDescreveRG
             // 
-            this.descreveRG.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveRG.AutoSize = true;
-            this.descreveRG.Location = new System.Drawing.Point(18, 381);
-            this.descreveRG.Name = "descreveRG";
-            this.descreveRG.Size = new System.Drawing.Size(60, 13);
-            this.descreveRG.TabIndex = 30;
-            this.descreveRG.Text = "Identidade:";
+            this.lbDescreveRG.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveRG.AutoSize = true;
+            this.lbDescreveRG.Location = new System.Drawing.Point(18, 381);
+            this.lbDescreveRG.Name = "lbDescreveRG";
+            this.lbDescreveRG.Size = new System.Drawing.Size(60, 13);
+            this.lbDescreveRG.TabIndex = 30;
+            this.lbDescreveRG.Text = "Identidade:";
             // 
             // txtRG
             // 
@@ -781,15 +407,15 @@
             this.txtRG.Size = new System.Drawing.Size(250, 20);
             this.txtRG.TabIndex = 31;
             // 
-            // descreveCPF
+            // lbDescreveCPF
             // 
-            this.descreveCPF.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveCPF.AutoSize = true;
-            this.descreveCPF.Location = new System.Drawing.Point(18, 411);
-            this.descreveCPF.Name = "descreveCPF";
-            this.descreveCPF.Size = new System.Drawing.Size(30, 13);
-            this.descreveCPF.TabIndex = 32;
-            this.descreveCPF.Text = "CPF:";
+            this.lbDescreveCPF.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveCPF.AutoSize = true;
+            this.lbDescreveCPF.Location = new System.Drawing.Point(18, 411);
+            this.lbDescreveCPF.Name = "lbDescreveCPF";
+            this.lbDescreveCPF.Size = new System.Drawing.Size(30, 13);
+            this.lbDescreveCPF.TabIndex = 32;
+            this.lbDescreveCPF.Text = "CPF:";
             // 
             // TituloDadosResponsavel
             // 
@@ -802,35 +428,35 @@
             this.TituloDadosResponsavel.TabIndex = 34;
             this.TituloDadosResponsavel.Text = "Dados do Contratante";
             // 
-            // descreveTelFixo
+            // lbDescreveTelFixo
             // 
-            this.descreveTelFixo.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveTelFixo.AutoSize = true;
-            this.descreveTelFixo.Location = new System.Drawing.Point(18, 441);
-            this.descreveTelFixo.Name = "descreveTelFixo";
-            this.descreveTelFixo.Size = new System.Drawing.Size(47, 13);
-            this.descreveTelFixo.TabIndex = 35;
-            this.descreveTelFixo.Text = "Tel Fixo:";
+            this.lbDescreveTelFixo.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveTelFixo.AutoSize = true;
+            this.lbDescreveTelFixo.Location = new System.Drawing.Point(18, 441);
+            this.lbDescreveTelFixo.Name = "lbDescreveTelFixo";
+            this.lbDescreveTelFixo.Size = new System.Drawing.Size(47, 13);
+            this.lbDescreveTelFixo.TabIndex = 35;
+            this.lbDescreveTelFixo.Text = "Tel Fixo:";
             // 
-            // descreveCel
+            // lbDescreveCel
             // 
-            this.descreveCel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveCel.AutoSize = true;
-            this.descreveCel.Location = new System.Drawing.Point(18, 471);
-            this.descreveCel.Name = "descreveCel";
-            this.descreveCel.Size = new System.Drawing.Size(42, 13);
-            this.descreveCel.TabIndex = 37;
-            this.descreveCel.Text = "Celular:";
+            this.lbDescreveCel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveCel.AutoSize = true;
+            this.lbDescreveCel.Location = new System.Drawing.Point(18, 471);
+            this.lbDescreveCel.Name = "lbDescreveCel";
+            this.lbDescreveCel.Size = new System.Drawing.Size(42, 13);
+            this.lbDescreveCel.TabIndex = 37;
+            this.lbDescreveCel.Text = "Celular:";
             // 
-            // descreveValContrato
+            // lbDescreveValContrato
             // 
-            this.descreveValContrato.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveValContrato.AutoSize = true;
-            this.descreveValContrato.Location = new System.Drawing.Point(18, 599);
-            this.descreveValContrato.Name = "descreveValContrato";
-            this.descreveValContrato.Size = new System.Drawing.Size(43, 13);
-            this.descreveValContrato.TabIndex = 39;
-            this.descreveValContrato.Text = "Estado:";
+            this.lbDescreveValContrato.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveValContrato.AutoSize = true;
+            this.lbDescreveValContrato.Location = new System.Drawing.Point(18, 599);
+            this.lbDescreveValContrato.Name = "lbDescreveValContrato";
+            this.lbDescreveValContrato.Size = new System.Drawing.Size(43, 13);
+            this.lbDescreveValContrato.TabIndex = 39;
+            this.lbDescreveValContrato.Text = "Estado:";
             // 
             // TituloDadosdoContrato
             // 
@@ -857,15 +483,15 @@
             this.txtValContrato.Size = new System.Drawing.Size(121, 21);
             this.txtValContrato.TabIndex = 35;
             // 
-            // descreveParcela
+            // lbDescreveParcela
             // 
-            this.descreveParcela.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveParcela.AutoSize = true;
-            this.descreveParcela.Location = new System.Drawing.Point(18, 629);
-            this.descreveParcela.Name = "descreveParcela";
-            this.descreveParcela.Size = new System.Drawing.Size(46, 13);
-            this.descreveParcela.TabIndex = 43;
-            this.descreveParcela.Text = "Parcela:";
+            this.lbDescreveParcela.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveParcela.AutoSize = true;
+            this.lbDescreveParcela.Location = new System.Drawing.Point(18, 629);
+            this.lbDescreveParcela.Name = "lbDescreveParcela";
+            this.lbDescreveParcela.Size = new System.Drawing.Size(46, 13);
+            this.lbDescreveParcela.TabIndex = 43;
+            this.lbDescreveParcela.Text = "Parcela:";
             // 
             // label3
             // 
@@ -888,15 +514,15 @@
             this.TituloDadosServico.TabIndex = 48;
             this.TituloDadosServico.Text = "Dados do Serviço";
             // 
-            // descreveCrianca
+            // lbDescreveCrianca
             // 
-            this.descreveCrianca.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveCrianca.AutoSize = true;
-            this.descreveCrianca.Location = new System.Drawing.Point(525, 257);
-            this.descreveCrianca.Name = "descreveCrianca";
-            this.descreveCrianca.Size = new System.Drawing.Size(57, 13);
-            this.descreveCrianca.TabIndex = 49;
-            this.descreveCrianca.Text = "Criança(s):";
+            this.lbDescreveCrianca.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveCrianca.AutoSize = true;
+            this.lbDescreveCrianca.Location = new System.Drawing.Point(525, 257);
+            this.lbDescreveCrianca.Name = "lbDescreveCrianca";
+            this.lbDescreveCrianca.Size = new System.Drawing.Size(57, 13);
+            this.lbDescreveCrianca.TabIndex = 49;
+            this.lbDescreveCrianca.Text = "Criança(s):";
             // 
             // txtNomeCrianca
             // 
@@ -918,15 +544,15 @@
             this.txtEscola.Size = new System.Drawing.Size(250, 20);
             this.txtEscola.TabIndex = 37;
             // 
-            // descreveEscola
+            // lbDescreveEscola
             // 
-            this.descreveEscola.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveEscola.AutoSize = true;
-            this.descreveEscola.Location = new System.Drawing.Point(525, 287);
-            this.descreveEscola.Name = "descreveEscola";
-            this.descreveEscola.Size = new System.Drawing.Size(53, 13);
-            this.descreveEscola.TabIndex = 51;
-            this.descreveEscola.Text = "Escola(s):";
+            this.lbDescreveEscola.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveEscola.AutoSize = true;
+            this.lbDescreveEscola.Location = new System.Drawing.Point(525, 287);
+            this.lbDescreveEscola.Name = "lbDescreveEscola";
+            this.lbDescreveEscola.Size = new System.Drawing.Size(53, 13);
+            this.lbDescreveEscola.TabIndex = 51;
+            this.lbDescreveEscola.Text = "Escola(s):";
             // 
             // txtRuaEscola
             // 
@@ -938,15 +564,15 @@
             this.txtRuaEscola.Size = new System.Drawing.Size(250, 20);
             this.txtRuaEscola.TabIndex = 38;
             // 
-            // descreveRuaEscola
+            // lbDescreveRuaEscola
             // 
-            this.descreveRuaEscola.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveRuaEscola.AutoSize = true;
-            this.descreveRuaEscola.Location = new System.Drawing.Point(525, 317);
-            this.descreveRuaEscola.Name = "descreveRuaEscola";
-            this.descreveRuaEscola.Size = new System.Drawing.Size(41, 13);
-            this.descreveRuaEscola.TabIndex = 53;
-            this.descreveRuaEscola.Text = "Rua(s):";
+            this.lbDescreveRuaEscola.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveRuaEscola.AutoSize = true;
+            this.lbDescreveRuaEscola.Location = new System.Drawing.Point(525, 317);
+            this.lbDescreveRuaEscola.Name = "lbDescreveRuaEscola";
+            this.lbDescreveRuaEscola.Size = new System.Drawing.Size(41, 13);
+            this.lbDescreveRuaEscola.TabIndex = 53;
+            this.lbDescreveRuaEscola.Text = "Rua(s):";
             // 
             // txtBairroEscola
             // 
@@ -958,25 +584,25 @@
             this.txtBairroEscola.Size = new System.Drawing.Size(250, 20);
             this.txtBairroEscola.TabIndex = 39;
             // 
-            // descreveBairroEscola
+            // lbDescreveBairroEscola
             // 
-            this.descreveBairroEscola.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveBairroEscola.AutoSize = true;
-            this.descreveBairroEscola.Location = new System.Drawing.Point(525, 347);
-            this.descreveBairroEscola.Name = "descreveBairroEscola";
-            this.descreveBairroEscola.Size = new System.Drawing.Size(48, 13);
-            this.descreveBairroEscola.TabIndex = 55;
-            this.descreveBairroEscola.Text = "Bairro(s):";
+            this.lbDescreveBairroEscola.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveBairroEscola.AutoSize = true;
+            this.lbDescreveBairroEscola.Location = new System.Drawing.Point(525, 347);
+            this.lbDescreveBairroEscola.Name = "lbDescreveBairroEscola";
+            this.lbDescreveBairroEscola.Size = new System.Drawing.Size(48, 13);
+            this.lbDescreveBairroEscola.TabIndex = 55;
+            this.lbDescreveBairroEscola.Text = "Bairro(s):";
             // 
-            // descreveApanha
+            // lbDescreveApanha
             // 
-            this.descreveApanha.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveApanha.AutoSize = true;
-            this.descreveApanha.Location = new System.Drawing.Point(525, 508);
-            this.descreveApanha.Name = "descreveApanha";
-            this.descreveApanha.Size = new System.Drawing.Size(47, 13);
-            this.descreveApanha.TabIndex = 57;
-            this.descreveApanha.Text = "Apanha:";
+            this.lbDescreveApanha.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveApanha.AutoSize = true;
+            this.lbDescreveApanha.Location = new System.Drawing.Point(525, 508);
+            this.lbDescreveApanha.Name = "lbDescreveApanha";
+            this.lbDescreveApanha.Size = new System.Drawing.Size(47, 13);
+            this.lbDescreveApanha.TabIndex = 57;
+            this.lbDescreveApanha.Text = "Apanha:";
             // 
             // TituloHorarios
             // 
@@ -989,15 +615,15 @@
             this.TituloHorarios.TabIndex = 59;
             this.TituloHorarios.Text = "Horários";
             // 
-            // descreveEntrega
+            // lbDescreveEntrega
             // 
-            this.descreveEntrega.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveEntrega.AutoSize = true;
-            this.descreveEntrega.Location = new System.Drawing.Point(525, 538);
-            this.descreveEntrega.Name = "descreveEntrega";
-            this.descreveEntrega.Size = new System.Drawing.Size(47, 13);
-            this.descreveEntrega.TabIndex = 62;
-            this.descreveEntrega.Text = "Entrega:";
+            this.lbDescreveEntrega.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveEntrega.AutoSize = true;
+            this.lbDescreveEntrega.Location = new System.Drawing.Point(525, 538);
+            this.lbDescreveEntrega.Name = "lbDescreveEntrega";
+            this.lbDescreveEntrega.Size = new System.Drawing.Size(47, 13);
+            this.lbDescreveEntrega.TabIndex = 62;
+            this.lbDescreveEntrega.Text = "Entrega:";
             // 
             // abreContrato
             // 
@@ -1050,15 +676,15 @@
             this.txtEscTel.Size = new System.Drawing.Size(250, 20);
             this.txtEscTel.TabIndex = 40;
             // 
-            // descreveEscTel
+            // lbDescreveEscTel
             // 
-            this.descreveEscTel.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.descreveEscTel.AutoSize = true;
-            this.descreveEscTel.Location = new System.Drawing.Point(525, 377);
-            this.descreveEscTel.Name = "descreveEscTel";
-            this.descreveEscTel.Size = new System.Drawing.Size(53, 26);
-            this.descreveEscTel.TabIndex = 110;
-            this.descreveEscTel.Text = "Tel(s) das\r\nEscolas:";
+            this.lbDescreveEscTel.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbDescreveEscTel.AutoSize = true;
+            this.lbDescreveEscTel.Location = new System.Drawing.Point(525, 377);
+            this.lbDescreveEscTel.Name = "lbDescreveEscTel";
+            this.lbDescreveEscTel.Size = new System.Drawing.Size(53, 26);
+            this.lbDescreveEscTel.TabIndex = 110;
+            this.lbDescreveEscTel.Text = "Tel(s) das\r\nEscolas:";
             // 
             // txtCel
             // 
@@ -1226,17 +852,17 @@
             this.pictureBox2.TabIndex = 20;
             this.pictureBox2.TabStop = false;
             // 
-            // pictureBox1
+            // picLogoTransRose
             // 
-            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(451, 35);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(457, 102);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 12;
-            this.pictureBox1.TabStop = false;
+            this.picLogoTransRose.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.picLogoTransRose.Image = ((System.Drawing.Image)(resources.GetObject("picLogoTransRose.Image")));
+            this.picLogoTransRose.InitialImage = ((System.Drawing.Image)(resources.GetObject("picLogoTransRose.InitialImage")));
+            this.picLogoTransRose.Location = new System.Drawing.Point(451, 35);
+            this.picLogoTransRose.Name = "picLogoTransRose";
+            this.picLogoTransRose.Size = new System.Drawing.Size(457, 102);
+            this.picLogoTransRose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.picLogoTransRose.TabIndex = 12;
+            this.picLogoTransRose.TabStop = false;
             // 
             // pictureBox3
             // 
@@ -1260,40 +886,40 @@
             this.Controls.Add(this.txtTelFixo);
             this.Controls.Add(this.txtCPF);
             this.Controls.Add(this.txtEscTel);
-            this.Controls.Add(this.descreveEscTel);
+            this.Controls.Add(this.lbDescreveEscTel);
             this.Controls.Add(this.txtEntrega);
             this.Controls.Add(this.txtApanha);
             this.Controls.Add(this.abreContrato);
             this.Controls.Add(this.buscarRegistro);
-            this.Controls.Add(this.descreveEntrega);
+            this.Controls.Add(this.lbDescreveEntrega);
             this.Controls.Add(this.TituloHorarios);
-            this.Controls.Add(this.descreveApanha);
+            this.Controls.Add(this.lbDescreveApanha);
             this.Controls.Add(this.txtBairroEscola);
-            this.Controls.Add(this.descreveBairroEscola);
+            this.Controls.Add(this.lbDescreveBairroEscola);
             this.Controls.Add(this.txtRuaEscola);
-            this.Controls.Add(this.descreveRuaEscola);
+            this.Controls.Add(this.lbDescreveRuaEscola);
             this.Controls.Add(this.txtEscola);
-            this.Controls.Add(this.descreveEscola);
+            this.Controls.Add(this.lbDescreveEscola);
             this.Controls.Add(this.txtNomeCrianca);
-            this.Controls.Add(this.descreveCrianca);
+            this.Controls.Add(this.lbDescreveCrianca);
             this.Controls.Add(this.TituloDadosServico);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.descreveParcela);
+            this.Controls.Add(this.lbDescreveParcela);
             this.Controls.Add(this.txtValContrato);
             this.Controls.Add(this.TituloDadosdoContrato);
-            this.Controls.Add(this.descreveValContrato);
-            this.Controls.Add(this.descreveCel);
-            this.Controls.Add(this.descreveTelFixo);
+            this.Controls.Add(this.lbDescreveValContrato);
+            this.Controls.Add(this.lbDescreveCel);
+            this.Controls.Add(this.lbDescreveTelFixo);
             this.Controls.Add(this.TituloDadosResponsavel);
-            this.Controls.Add(this.descreveCPF);
+            this.Controls.Add(this.lbDescreveCPF);
             this.Controls.Add(this.txtRG);
-            this.Controls.Add(this.descreveRG);
+            this.Controls.Add(this.lbDescreveRG);
             this.Controls.Add(this.txtBairro);
-            this.Controls.Add(this.descreveBairro);
+            this.Controls.Add(this.lbDescreveBairro);
             this.Controls.Add(this.txtNumCasa);
-            this.Controls.Add(this.descreveCasa);
+            this.Controls.Add(this.lbDescreveCasa);
             this.Controls.Add(this.txtRua);
-            this.Controls.Add(this.descreveRua);
+            this.Controls.Add(this.lbDescreveRua);
             this.Controls.Add(this.cadastraCliente);
             this.Controls.Add(this.ultimoRegistro);
             this.Controls.Add(this.primeiroRegistro);
@@ -1301,10 +927,10 @@
             this.Controls.Add(this.excluirRegistro);
             this.Controls.Add(this.proximoRegistro);
             this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.descreveNome);
+            this.Controls.Add(this.picLogoTransRose);
+            this.Controls.Add(this.lbDescreveNome);
             this.Controls.Add(this.txtNome);
-            this.Controls.Add(this.descreveId);
+            this.Controls.Add(this.lbDescreveId);
             this.Controls.Add(this.Menu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.Menu;
@@ -1312,7 +938,7 @@
             this.Name = "VerCadastros";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Clientes - Cadastro de Clientes TransRose";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.VerCadastros_Closing);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.VerCadastros_FormClosing);
             this.Load += new System.EventHandler(this.VerCadastros_Load);
             this.Resize += new System.EventHandler(this.VerCadastros_Resize);
             this.Menu.ResumeLayout(false);
@@ -1326,109 +952,44 @@
             ((System.ComponentModel.ISupportInitialize)(this.excluirRegistro)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.proximoRegistro)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLogoTransRose)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void abreContrato_Click(object sender, EventArgs e)
         {
-        }
-
-        private void notifyCadastro_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            this.notifyExecucao.Visible = false;
-            base.WindowState = FormWindowState.Normal;
-        }
-
-        private void primeiroRegistro_Click(object sender, EventArgs e)
-        {
-            string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-            string cmdText = "SELECT *FROM Cadastros WHERE ID IS NOT NULL order by ID ASC";
-            OleDbConnection connection = new OleDbConnection(connectionString);
-            OleDbCommand command = new OleDbCommand(cmdText, connection);
             try
             {
-                connection.Open();
-                OleDbDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    int num = 1;
-                    if (num < 2)
-                    {
-                        this.descreveId.Text = Convert.ToInt32(reader["ID"]).ToString();
-                        this.txtNome.Text = reader["Nome"].ToString();
-                        this.txtRua.Text = reader["Rua"].ToString();
-                        this.txtNumCasa.Text = reader["NumCasa"].ToString();
-                        this.txtBairro.Text = reader["Bairro"].ToString();
-                        this.txtRG.Text = reader["RG"].ToString();
-                        this.txtCPF.Text = reader["CPF"].ToString();
-                        this.txtTelFixo.Text = reader["Telefone Fixo"].ToString();
-                        this.txtCel.Text = reader["Celular"].ToString();
-                        this.txtValContrato.Items.Add(reader["Contrato"].ToString());
-                        this.txtValContrato.SelectedItem = reader["Contrato"].ToString();
-                        this.txtParcela.Text = "R$" + reader["Parcela"] + " Reais".ToString();
-                        this.txtTotalAno.Text = "R$" + reader["Valor Anual"] + " Reais".ToString();
-                        this.txtNomeCrianca.Text = reader["Criança"].ToString();
-                        this.txtEscola.Text = reader["Nome da escola"].ToString();
-                        this.txtRuaEscola.Text = reader["Rua da escola"].ToString();
-                        this.txtBairroEscola.Text = reader["Bairro da escola"].ToString();
-                        this.txtEscTel.Text = reader["Telefone da escola"].ToString();
-                        this.txtApanha.Text = reader["Apanha"] + " Hrs.".ToString();
-                        this.txtEntrega.Text = reader["Entrega"] + " Hrs.".ToString();
-                        if (this.txtValContrato.SelectedItem.ToString() == "True")
-                        {
-                            this.txtValContrato.Items.Clear();
-                            this.txtValContrato.Items.Add("Ativo");
-                            this.txtValContrato.Items.Add("Inativo");
-                            this.txtValContrato.SelectedItem = "Ativo";
-                        }
-                        else
-                        {
-                            this.txtValContrato.Items.Clear();
-                            this.txtValContrato.Items.Add("Ativo");
-                            this.txtValContrato.Items.Add("Inativo");
-                            this.txtValContrato.SelectedItem = "Inativo";
-                        }
-                        reader.Close();
-                        connection.Close();
-                        return;
-                    }
-                    reader.Close();
-                }
+                Process.Start(localizaContrato);
             }
             catch (OleDbException exception)
             {
-                MessageBox.Show("Error: " + exception.Message);
-            }
-            finally
-            {
-                connection.Close();
+                MessageBox.Show("Erro: Não foi possível abrir o contrato do cliente, contate o administrador da aplicação." + exception.Message);
             }
         }
 
         private void proximoRegistro_Click(object sender, EventArgs e)
         {
-            if (this.descreveId.Text == "#ID")
+            if (this.lbDescreveId.Text == "#ID")
             {
                 MessageBox.Show("Nenhum cliente cadastrado no banco de dados, por favor, cadastre um cliente para visualizá-lo", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
             }
             else
             {
-                int num = Convert.ToInt32(this.descreveId.Text);
                 string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-                string cmdText = "SELECT TOP 1 * FROM Cadastros WHERE ID > "+ num +" order by ID ASC";
+                string cmdText = "SELECT TOP 1 * FROM Cadastros WHERE ID > " + Convert.ToInt32(this.lbDescreveId.Text) + " order by ID ASC";
                 OleDbConnection connection = new OleDbConnection(connectionString);
                 OleDbCommand command = new OleDbCommand(cmdText, connection);
+                connection.Open();
+                OleDbDataReader reader = command.ExecuteReader();
                 try
                 {
-                    connection.Open();
-                    OleDbDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        descreveId.Text = Convert.ToInt32(reader["ID"]).ToString();
+                        lbDescreveId.Text = Convert.ToInt32(reader["ID"]).ToString();
                         txtNome.Text = reader["Nome"].ToString();
                         txtRua.Text = reader["Rua"].ToString();
                         txtNumCasa.Text = reader["NumCasa"].ToString();
@@ -1462,14 +1023,120 @@
                             this.txtValContrato.Items.Add("Inativo");
                             this.txtValContrato.SelectedItem = "Inativo";
                         }
-                        if (Convert.ToInt32(this.descreveId.Text) > num)
+                    }
+                }
+                catch (OleDbException exception)
+                {
+                    MessageBox.Show("Error: " + exception.Message);
+                }
+                finally
+                {
+                    reader.Close();
+                    connection.Close();
+                }
+            }
+        }
+
+        private void anteriorRegistro_Click(object sender, EventArgs e)
+        {
+            if (this.lbDescreveId.Text == "#ID")
+            {
+                MessageBox.Show("Nenhum cliente cadastrado no banco de dados, por favor, cadastre um cliente para usar esta função", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            }
+            else
+            {
+                string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
+                string cmdText = "SELECT TOP 1 * FROM Cadastros WHERE ID < " + Convert.ToInt32(this.lbDescreveId.Text) + " order by ID DESC";
+                OleDbConnection connection = new OleDbConnection(connectionString);
+                OleDbCommand command = new OleDbCommand(cmdText, connection);
+                connection.Open();
+                OleDbDataReader reader = command.ExecuteReader();
+                try
+                {
+                    while (reader.Read())
+                    {
+                        this.lbDescreveId.Text = Convert.ToInt32(reader["ID"]).ToString();
+                        this.txtNome.Text = reader["Nome"].ToString();
+                        this.txtRua.Text = reader["Rua"].ToString();
+                        this.txtNumCasa.Text = reader["NumCasa"].ToString();
+                        this.txtBairro.Text = reader["Bairro"].ToString();
+                        this.txtRG.Text = reader["RG"].ToString();
+                        this.txtCPF.Text = reader["CPF"].ToString();
+                        this.txtTelFixo.Text = reader["Telefone Fixo"].ToString();
+                        this.txtCel.Text = reader["Celular"].ToString();
+                        this.txtValContrato.Items.Add(reader["Contrato"].ToString());
+                        this.txtValContrato.SelectedItem = reader["Contrato"].ToString();
+                        this.txtParcela.Text = "R$" + reader["Parcela"] + " Reais".ToString();
+                        this.txtTotalAno.Text = "R$" + reader["Valor Anual"] + " Reais".ToString();
+                        this.txtNomeCrianca.Text = reader["Criança"].ToString();
+                        this.txtEscola.Text = reader["Nome da escola"].ToString();
+                        this.txtRuaEscola.Text = reader["Rua da escola"].ToString();
+                        this.txtBairroEscola.Text = reader["Bairro da escola"].ToString();
+                        this.txtEscTel.Text = reader["Telefone da escola"].ToString();
+                        this.txtApanha.Text = reader["Apanha"] + " Hrs.".ToString();
+                        this.txtEntrega.Text = reader["Entrega"] + " Hrs.".ToString();
+                        if (this.txtValContrato.SelectedItem.ToString() == "True")
                         {
-                            reader.Close();
-                            connection.Close();
-                            return;
+                            this.txtValContrato.Items.Clear();
+                            this.txtValContrato.Items.Add("Ativo");
+                            this.txtValContrato.SelectedItem = "Ativo";
+                        }
+                        else
+                        {
+                            this.txtValContrato.Items.Clear();
+                            this.txtValContrato.Items.Add("Inativo");
+                            this.txtValContrato.SelectedItem = "Inativo";
                         }
                     }
+                }
+                catch (OleDbException exception)
+                {
+                    MessageBox.Show("Error: " + exception.Message);
+                }
+                finally
+                {
                     reader.Close();
+                    connection.Close();
+                }
+            }
+        }
+
+        private void atualizaCliente_Click(object sender, EventArgs e)
+        {
+            if(lbDescreveId.Text == "#ID")
+            {
+                MessageBox.Show("Nenhum cliente cadastrado no banco de dados!", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            }
+            else
+            {
+                idtrat = Convert.ToInt32(lbDescreveId.Text);
+                bool flag = false;
+                if (this.txtValContrato.SelectedItem.ToString() == "Ativo")
+                {
+                    flag = true;
+                }
+                else
+                {
+                    flag = false;
+                }
+                string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
+                object[] objArray1 = new object[] {
+                "UPDATE Cadastros SET Nome = '", txtNome.Text, "',Rua = '", txtRua.Text, "',Contrato = ", flag.ToString(), ",CPF = '", txtCPF.Text, "',RG = '", txtRG.Text, "',NumCasa = '", txtNumCasa.Text, "', Bairro = '", txtBairro.Text, "',[Telefone Fixo] = '", txtTelFixo.Text,
+                "',Celular = '", txtCel.Text, "',Criança = '", txtNomeCrianca.Text, "',[Nome da escola] = '", txtEscola.Text, "', [Rua da escola] = '", txtRuaEscola.Text, "',[Bairro da escola] = '", txtBairroEscola.Text, "',[Telefone da escola] = '", txtEscTel.Text, "',Apanha = '", txtApanha.Text, "', Entrega = '", txtEntrega.Text,
+                "' WHERE ID = ", idtrat
+            };
+                string cmdText = string.Concat(objArray1);
+                OleDbConnection connection = new OleDbConnection(connectionString);
+                OleDbCommand command = new OleDbCommand(cmdText, connection);
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    this.notifySucesso.Visible = true;
+                    this.notifySucesso.ShowBalloonTip(5);
+                    MessageBox.Show("Cliente atualizado com sucesso.");
+                    Thread.Sleep(0x7d0);
+                    this.notifySucesso.Visible = false;
                 }
                 catch (OleDbException exception)
                 {
@@ -1482,27 +1149,35 @@
             }
         }
 
-        private void sobreToolStripMenuItem_Click(object sender, EventArgs e)
+        public void buscarRegistro_Click(object sender, EventArgs e)
         {
-            new AboutBox().Show();
+            new buscaClientes(this).Show();
         }
 
-        public void ultimoCliente()
+        private void cadastraCliente_Click(object sender, EventArgs e)
         {
-            string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-            string cmdText = "SELECT *FROM Cadastros WHERE ID IS NOT NULL order by ID DESC";
-            OleDbConnection connection = new OleDbConnection(connectionString);
-            OleDbCommand command = new OleDbCommand(cmdText, connection);
-            try
+            new novoCliente().Show();
+        }
+
+        private void cadastrosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+        }
+
+        public void CarregaDados()
+        {
+            if (((BuscaID.ToString() == "") & (BuscaNome == "")) & (BuscaCrianca == ""))
             {
-                connection.Open();
-                OleDbDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+                string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
+                string cmdText = "SELECT *FROM Cadastros WHERE ID IS NOT NULL order by ID ASC";
+                OleDbConnection connection = new OleDbConnection(connectionString);
+                OleDbCommand command = new OleDbCommand(cmdText, connection);
+                try
                 {
-                    int num = 1;
-                    if (num < 2)
+                    connection.Open();
+                    OleDbDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
                     {
-                        this.descreveId.Text = Convert.ToInt32(reader["ID"]).ToString();
+                        this.lbDescreveId.Text = Convert.ToInt32(reader["ID"]).ToString();
                         this.txtNome.Text = reader["Nome"].ToString();
                         this.txtRua.Text = reader["Rua"].ToString();
                         this.txtNumCasa.Text = reader["NumCasa"].ToString();
@@ -1542,6 +1217,221 @@
                     }
                     reader.Close();
                 }
+                catch (OleDbException exception)
+                {
+                    MessageBox.Show(exception.Message, "Erro", MessageBoxButtons.OK);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+            else
+            {
+                string str3 = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
+                string str4 = "";
+                if (BuscaID != "")
+                {
+                    idtrat = Convert.ToInt32(BuscaID);
+                }
+                if (((BuscaID != "") & (BuscaNome != "")) & (BuscaCrianca != ""))
+                {
+                    object[] objArray1 = new object[] { "SELECT *FROM Cadastros WHERE ID = ", idtrat, " AND Nome LIKE '%", BuscaNome, "%' AND Criança LIKE '%", BuscaCrianca, "%'" };
+                    str4 = string.Concat(objArray1);
+                }
+                else if (((BuscaID != "") & (BuscaNome == "")) & (BuscaCrianca == ""))
+                {
+                    str4 = ("SELECT *FROM Cadastros WHERE ID = " + idtrat) ?? "";
+                }
+                else if (((BuscaID == "") & (BuscaNome != "")) & (BuscaCrianca == ""))
+                {
+                    str4 = "SELECT *FROM Cadastros WHERE Nome LIKE '%" + BuscaNome + "%'";
+                }
+                else if (((BuscaID == "") & (BuscaNome == "")) & (BuscaCrianca != ""))
+                {
+                    str4 = "SELECT *FROM Cadastros WHERE Criança LIKE '%" + BuscaCrianca + "%'";
+                }
+                else if (((BuscaID != "") & (BuscaNome != "")) & (BuscaCrianca == ""))
+                {
+                    object[] objArray2 = new object[] { "SELECT *FROM Cadastros WHERE ID = ", idtrat, " AND Nome LIKE '%", BuscaNome, "%'" };
+                    str4 = string.Concat(objArray2);
+                }
+                else if (((BuscaID != "") & (BuscaNome == "")) & (BuscaCrianca != ""))
+                {
+                    object[] objArray3 = new object[] { "SELECT *FROM Cadastros WHERE ID = ", idtrat, " AND Criança LIKE '%", BuscaCrianca, "%'" };
+                    str4 = string.Concat(objArray3);
+                }
+                else if (((BuscaID == "") & (BuscaNome != "")) & (BuscaCrianca != ""))
+                {
+                    string[] textArray1 = new string[] { "SELECT *FROM Cadastros WHERE Nome LIKE '%", BuscaNome, "%' AND Criança LIKE '%", BuscaCrianca, "%'" };
+                    str4 = string.Concat(textArray1);
+                }
+                OleDbConnection connection2 = new OleDbConnection(str3);
+                OleDbCommand command2 = new OleDbCommand(str4, connection2);
+                try
+                {
+                    connection2.Open();
+                    OleDbDataReader reader2 = command2.ExecuteReader();
+                    if (reader2.HasRows)
+                    {
+                        while (reader2.Read())
+                        {
+                            this.lbDescreveId.Text = Convert.ToInt32(reader2["ID"]).ToString();
+                            this.txtNome.Text = reader2["Nome"].ToString();
+                            this.txtRua.Text = reader2["Rua"].ToString();
+                            this.txtNumCasa.Text = reader2["NumCasa"].ToString();
+                            this.txtBairro.Text = reader2["Bairro"].ToString();
+                            this.txtRG.Text = reader2["RG"].ToString();
+                            this.txtCPF.Text = reader2["CPF"].ToString();
+                            this.txtTelFixo.Text = reader2["Telefone Fixo"].ToString();
+                            this.txtCel.Text = reader2["Celular"].ToString();
+                            this.txtValContrato.Items.Add(reader2["Contrato"].ToString());
+                            this.txtValContrato.SelectedItem = reader2["Contrato"].ToString();
+                            this.txtParcela.Text = "R$" + reader2["Parcela"] + " Reais".ToString();
+                            this.txtTotalAno.Text = "R$" + reader2["Valor Anual"] + " Reais".ToString();
+                            this.txtNomeCrianca.Text = reader2["Criança"].ToString();
+                            this.txtEscola.Text = reader2["Nome da escola"].ToString();
+                            this.txtRuaEscola.Text = reader2["Rua da escola"].ToString();
+                            this.txtBairroEscola.Text = reader2["Bairro da escola"].ToString();
+                            this.txtApanha.Text = reader2["Apanha"] + " Hrs.".ToString();
+                            this.txtEntrega.Text = reader2["Entrega"] + " Hrs.".ToString();
+                            if (this.txtValContrato.SelectedItem.ToString() == "True")
+                            {
+                                this.txtValContrato.Items.Clear();
+                                this.txtValContrato.Items.Add("Sim");
+                                this.txtValContrato.SelectedItem = "Sim";
+                            }
+                            else
+                            {
+                                this.txtValContrato.Items.Clear();
+                                this.txtValContrato.Items.Add("Não");
+                                this.txtValContrato.SelectedItem = "Não";
+                            }
+                        }
+                        reader2.Close();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Não foram encontrados clientes com os dados especificados, tente novamente.", "Sem resultados", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                        reader2.Close();
+                        connection2.Close();
+                    }
+                }
+                catch (OleDbException exception)
+                {
+                    MessageBox.Show(exception.Message, "Erro", MessageBoxButtons.OK);
+                }
+                finally
+                {
+                    connection2.Close();
+                }
+            }
+        }
+
+        public static manipulaArquivos getArquivos()
+        {
+            return contexto;
+        }
+
+        private void excluirRegistro_Click(object sender, EventArgs e)
+        {
+            if (lbDescreveId.Text == "#ID")
+            {
+                MessageBox.Show("Nenhum cliente cadastrado no banco de dados!", "Erro!", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            }
+            else
+            {
+                if (MessageBox.Show("Deseja mesmo excluir este cliente?", "Excluir", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
+                    string cmdText = ("DELETE FROM Cadastros WHERE ID = " + Convert.ToInt32(this.lbDescreveId.Text));
+                    OleDbConnection connection = new OleDbConnection(connectionString);
+                    OleDbCommand command = new OleDbCommand(cmdText, connection);
+                    try
+                    {
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        this.notifyDeleteSucesso.Visible = true;
+                        this.notifyDeleteSucesso.ShowBalloonTip(0);
+                        MessageBox.Show("Cliente exclu\x00eddo com sucesso.");
+                        Thread.Sleep(0x7d0);
+                        this.notifyDeleteSucesso.Visible = false;
+                    }
+                    catch (OleDbException exception)
+                    {
+                        MessageBox.Show("Error: " + exception.Message);
+                    }
+                    finally
+                    {
+                        connection.Close();
+                        this.ultimoRegistro_Click(null,null);
+                    }
+                }
+            }
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void notifyCadastro_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            this.notifyExecucao.Visible = false;
+            base.WindowState = FormWindowState.Normal;
+        }
+
+        private void primeiroRegistro_Click(object sender, EventArgs e)
+        {
+            string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
+            string cmdText = "SELECT TOP 1 * FROM Cadastros WHERE ID IS NOT NULL order by ID ASC";
+            OleDbConnection connection = new OleDbConnection(connectionString);
+            OleDbCommand command = new OleDbCommand(cmdText, connection);
+            connection.Open();
+            OleDbDataReader reader = command.ExecuteReader();
+            try
+            {
+                while (reader.Read())
+                {
+                    this.lbDescreveId.Text = Convert.ToInt32(reader["ID"]).ToString();
+                    this.txtNome.Text = reader["Nome"].ToString();
+                    this.txtRua.Text = reader["Rua"].ToString();
+                    this.txtNumCasa.Text = reader["NumCasa"].ToString();
+                    this.txtBairro.Text = reader["Bairro"].ToString();
+                    this.txtRG.Text = reader["RG"].ToString();
+                    this.txtCPF.Text = reader["CPF"].ToString();
+                    this.txtTelFixo.Text = reader["Telefone Fixo"].ToString();
+                    this.txtCel.Text = reader["Celular"].ToString();
+                    this.txtValContrato.Items.Add(reader["Contrato"].ToString());
+                    this.txtValContrato.SelectedItem = reader["Contrato"].ToString();
+                    this.txtParcela.Text = "R$" + reader["Parcela"] + " Reais".ToString();
+                    this.txtTotalAno.Text = "R$" + reader["Valor Anual"] + " Reais".ToString();
+                    this.txtNomeCrianca.Text = reader["Criança"].ToString();
+                    this.txtEscola.Text = reader["Nome da escola"].ToString();
+                    this.txtRuaEscola.Text = reader["Rua da escola"].ToString();
+                    this.txtBairroEscola.Text = reader["Bairro da escola"].ToString();
+                    this.txtEscTel.Text = reader["Telefone da escola"].ToString();
+                    this.txtApanha.Text = reader["Apanha"] + " Hrs.".ToString();
+                    this.txtEntrega.Text = reader["Entrega"] + " Hrs.".ToString();
+                    if (this.txtValContrato.SelectedItem.ToString() == "True")
+                    {
+                        this.txtValContrato.Items.Clear();
+                        this.txtValContrato.Items.Add("Ativo");
+                        this.txtValContrato.Items.Add("Inativo");
+                        this.txtValContrato.SelectedItem = "Ativo";
+                    }
+                    else
+                    {
+                        this.txtValContrato.Items.Clear();
+                        this.txtValContrato.Items.Add("Ativo");
+                        this.txtValContrato.Items.Add("Inativo");
+                        this.txtValContrato.SelectedItem = "Inativo";
+                    }
+                }
             }
             catch (OleDbException exception)
             {
@@ -1549,136 +1439,127 @@
             }
             finally
             {
+                reader.Close();
                 connection.Close();
             }
         }
 
         private void ultimoRegistro_Click(object sender, EventArgs e)
         {
-            this.ultimoCliente();
-        }
-
-        public static void UpaArquivos(string db, string ct)
-        {
-            if (System.IO.File.Exists(@"C:\Windows\Temp\transrosedb\" + db + ".mdb"))
-            {
-                FtpWebRequest request;
-                try
-                {
-                    request = (FtpWebRequest) WebRequest.Create("ftp://192.168.15.10/files/" + db + ".mdb");
-                    request.Method = "STOR";
-                    request.Proxy = null;
-                    request.UseBinary = true;
-                    request.UsePassive = true;
-                    request.Credentials = new NetworkCredential("", "");
-                    FileInfo info = new FileInfo(@"C:\Windows\Temp\transrosedb\" + db + ".mdb");
-                    byte[] buffer = new byte[info.Length];
-                    using (FileStream stream = info.OpenRead())
-                    {
-                        stream.Read(buffer, 0, Convert.ToInt32(info.Length));
-                    }
-                    using (Stream stream2 = request.GetRequestStream())
-                    {
-                        stream2.Write(buffer, 0, buffer.Length);
-                    }
-                }
-                catch (WebException exception)
-                {
-                    MessageBox.Show("Erro: " + ((FtpWebResponse) exception.Response).StatusDescription);
-                }
-                try
-                {
-                    request = (FtpWebRequest) WebRequest.Create(new Uri("ftp://192.168.15.10/files/" + ct + ".doc"));
-                    request.Method = "STOR";
-                    request.Proxy = null;
-                    request.UseBinary = true;
-                    request.UsePassive = true;
-                    request.Credentials = new NetworkCredential("", "");
-                    FileInfo info2 = new FileInfo(@"C:\Windows\Temp\transrosedb\" + ct + ".doc");
-                    byte[] buffer2 = new byte[info2.Length];
-                    using (FileStream stream3 = info2.OpenRead())
-                    {
-                        stream3.Read(buffer2, 0, Convert.ToInt32(info2.Length));
-                    }
-                    using (Stream stream4 = request.GetRequestStream())
-                    {
-                        stream4.Write(buffer2, 0, buffer2.Length);
-                    }
-                }
-                catch (Exception exception2)
-                {
-                    MessageBox.Show("Erro: " + exception2);
-                }
-                try
-                {
-                    request = (FtpWebRequest) WebRequest.Create(new Uri("ftp://192.168.15.10/files/array.txt"));
-                    request.Method = "STOR";
-                    request.Proxy = null;
-                    request.UseBinary = true;
-                    request.UsePassive = true;
-                    request.Credentials = new NetworkCredential("", "");
-                    FileInfo info3 = new FileInfo(@"C:\Windows\Temp\transrosedb\array.txt");
-                    byte[] buffer3 = new byte[info3.Length];
-                    using (FileStream stream5 = info3.OpenRead())
-                    {
-                        stream5.Read(buffer3, 0, Convert.ToInt32(info3.Length));
-                    }
-                    using (Stream stream6 = request.GetRequestStream())
-                    {
-                        stream6.Write(buffer3, 0, buffer3.Length);
-                    }
-                }
-                catch (Exception exception3)
-                {
-                    MessageBox.Show("Erro: " + exception3);
-                }
-            }
-        }
-
-        private void VerCadastros_Closing(object sender, FormClosingEventArgs e)
-        {
-            upaArquivos(ref upar);
-            e.Cancel = false;
-        }
-
-        private void upaArquivos(ref bool upa)
-        {
-            /// Verifica se é necessário upar contrato e db ou só fechar a aplicação
-            /// Se é necessário
-            if (upa == true)
-            {
-                UpaArquivos(db, ct);
-            }
-            /// Senão, upa apenas array
+            string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
+            string cmdText = "SELECT TOP 1 * FROM Cadastros WHERE ID IS NOT NULL order by ID DESC";
+            OleDbConnection connection = new OleDbConnection(connectionString);
+            OleDbCommand command = new OleDbCommand(cmdText, connection);
+            connection.Open();
+            OleDbDataReader reader = command.ExecuteReader();
             try
             {
-                FtpWebRequest request;
-                request = (FtpWebRequest)WebRequest.Create(new Uri("ftp://192.168.15.10/files/array.txt"));
-                request.Method = "STOR";
-                request.Proxy = null;
-                request.UseBinary = true;
-                request.UsePassive = true;
-                request.Credentials = new NetworkCredential("", "");
-                FileInfo info3 = new FileInfo(@"C:\Windows\Temp\transrosedb\array.txt");
-                byte[] buffer3 = new byte[info3.Length];
-                using (FileStream stream5 = info3.OpenRead())
+                
+                while (reader.Read())
                 {
-                    stream5.Read(buffer3, 0, Convert.ToInt32(info3.Length));
-                }
-                using (Stream stream6 = request.GetRequestStream())
-                {
-                    stream6.Write(buffer3, 0, buffer3.Length);
+                        this.lbDescreveId.Text = Convert.ToInt32(reader["ID"]).ToString();
+                        this.txtNome.Text = reader["Nome"].ToString();
+                        this.txtRua.Text = reader["Rua"].ToString();
+                        this.txtNumCasa.Text = reader["NumCasa"].ToString();
+                        this.txtBairro.Text = reader["Bairro"].ToString();
+                        this.txtRG.Text = reader["RG"].ToString();
+                        this.txtCPF.Text = reader["CPF"].ToString();
+                        this.txtTelFixo.Text = reader["Telefone Fixo"].ToString();
+                        this.txtCel.Text = reader["Celular"].ToString();
+                        this.txtValContrato.Items.Add(reader["Contrato"].ToString());
+                        this.txtValContrato.SelectedItem = reader["Contrato"].ToString();
+                        this.txtParcela.Text = "R$" + reader["Parcela"] + " Reais".ToString();
+                        this.txtTotalAno.Text = "R$" + reader["Valor Anual"] + " Reais".ToString();
+                        this.txtNomeCrianca.Text = reader["Criança"].ToString();
+                        this.txtEscola.Text = reader["Nome da escola"].ToString();
+                        this.txtRuaEscola.Text = reader["Rua da escola"].ToString();
+                        this.txtBairroEscola.Text = reader["Bairro da escola"].ToString();
+                        this.txtEscTel.Text = reader["Telefone da escola"].ToString();
+                        this.txtApanha.Text = reader["Apanha"] + " Hrs.".ToString();
+                        this.txtEntrega.Text = reader["Entrega"] + " Hrs.".ToString();
+                        if (this.txtValContrato.SelectedItem.ToString() == "True")
+                        {
+                            this.txtValContrato.Items.Clear();
+                            this.txtValContrato.Items.Add("Ativo");
+                            this.txtValContrato.Items.Add("Inativo");
+                            this.txtValContrato.SelectedItem = "Ativo";
+                        }
+                        else
+                        {
+                            this.txtValContrato.Items.Clear();
+                            this.txtValContrato.Items.Add("Ativo");
+                            this.txtValContrato.Items.Add("Inativo");
+                            this.txtValContrato.SelectedItem = "Inativo";
+                        }
                 }
             }
-            catch (Exception exception3)
+            catch (OleDbException exception)
             {
-                MessageBox.Show("Erro: " + exception3);
+                MessageBox.Show("Erro: " + exception.Message);
+            }
+            finally
+            {
+                connection.Close();
+                reader.Close();
+            }
+        }
+
+        private void sobreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new AboutBox().Show();
+        }
+        
+        private void VerCadastros_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (clicouSair)
+            {
+                mostraDialogoSalvar(e);
+                clicouSair = false;
+            }
+            else
+            {
+                switch (e.CloseReason)
+                {
+                    case CloseReason.UserClosing:
+                        mostraDialogoSalvar(e);
+                        break;
+                    case CloseReason.ApplicationExitCall:
+                        Application.Exit();
+                        break;
+                    default:
+                        throw new Exception("Houve um erro ao fechar a aplicação, forçando a interrupção.");
+                }
+            }            
+        }
+
+        public void mostraDialogoSalvar(FormClosingEventArgs e)
+        {
+            if(contexto == null)
+            {
+                Application.Exit();
+                return;
+            }
+            DialogResult mensagemSaindo = MessageBox.Show("Deseja salvar as alterações?", "Já está saindo?", MessageBoxButtons.YesNoCancel);
+            if (mensagemSaindo == DialogResult.Yes)
+            {
+                contexto.uparArquivo("db" + contexto.ano + ".mdb");
+                contexto.uparArquivo("ct" + contexto.ano + ".doc");
+                contexto.uparArquivo("menu.mdb");
+                Application.Exit();
+            }
+            else if (mensagemSaindo == DialogResult.No)
+            {
+                Application.Exit();
+            }
+            else
+            {
+                e.Cancel = true;
             }
         }
 
         private void VerCadastros_Load(object sender, EventArgs e)
         {
-            SplashScreen screen = new SplashScreen(0);
+            SplashScreen screen = new SplashScreen();
             if (screen.ShowDialog() == DialogResult.OK)
             {
                 this.CarregaDados();
@@ -1702,6 +1583,7 @@
 
         private void sairToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            clicouSair = true;
             Application.Exit();
         }
 
@@ -1711,110 +1593,42 @@
             if (MessageBox.Show("Deseja mesmo excluir o banco de dados do ano que está a ser utilizado? Esta ação não pode ser revertida!", "Excluir banco de dados do ano atual", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 ///Exclui Contrato do ano
-                str = "ftp://192.168.15.10/files/" + ct + ".doc";
+                str = "ftp://192.168.15.10/files/ct" + contexto.ano + ".doc";
 
                 ///Se funcionar excluir Banco de Dados do ano
-                if (excluiArquivo(ref str) == true)
+                if (contexto.excluiArquivo(ref str) == true)
                 {
                     /// Exclui Banco de Dados do ano
-                    str = "ftp://192.168.15.10/files/" + db + ".mdb";
+                    str = "ftp://192.168.15.10/files/db" + contexto.ano + ".mdb";
 
-                    ///Se funcionar então exclui o ano do vetor de anos da splashscreen
-                    if(excluiArquivo(ref str) == true)
+                    ///Se funcionar então exclui o ano do menu da SplashScreen
+                    if (contexto.excluiArquivo(ref str) == true)
                     {
-                        /// Exclui ano do vetor
-                        string[] strArray = System.IO.File.ReadAllLines(@"C:\Windows\Temp\transrosedb\array.txt");
-                        for (int i = 0; i < strArray.Length; i++)
-                        {
-                            if (strArray[i] == ano.ToString())
-                            {
-                                strArray[i] = null;
-                            }
-                        }
-                        
-                        /// Escreve (substituindo) o novo vetor no arquivo
                         try
                         {
-                            StreamWriter writer = System.IO.File.CreateText(@"C:\Windows\Temp\transrosedb\array.txt");
-                            for (int i = 0; i < strArray.Length; i++)
-                            {
-                                writer.WriteLine(strArray[i]);
-                            }
-                            writer.Close();
+                            contexto.excluiAnoAtualDoMenu();
                         }
-                        catch (Exception exception)
+                        catch(Exception ex)
                         {
-                            MessageBox.Show("Houve um erro ao excluir o ano do menu principal, contate o suporte e informe: " + exception, "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                            Application.Exit();
+                            MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK);
+                            contexto.uparArquivo("db" + contexto.ano + ".mdb");
+                            contexto.uparArquivo("ct" + contexto.ano + ".doc");
+                        }
+                        finally
+                        {
+                            Application.Restart();
                         }
                     }
                 }
-                upar = false;
-                Application.Exit();
             }
         }
 
-        private bool excluiArquivo(ref string str)
-        {
-            try
-            {
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(str);
-                request.Credentials = new NetworkCredential("", "");
-                request.Method = WebRequestMethods.Ftp.DeleteFile;
-                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-                return true;
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Erro fatal: Não foi possível realizar a operação solicitada, contate o suporte.", "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                return false;
-            }
-        }
+        
 
         private void incluirRegistros(object sender, EventArgs e)
         {
-            new incluiRegistros().Show();
+            new ConstruindoincluiRegistro().Show();
         }
-
-        /*public static string BuscaCrianca
-        {
-            get; set;
-        }
-
-        public static string BuscaID
-        {
-            get; set;
-        }
-
-        public static string BuscaNome
-        {
-            get; set;
-        }
-
-        public static string ct
-        {
-            get; set;
-        }
-
-        public static string db
-        {
-            get; set;
-        }
-
-        public static int idtrat
-        {
-            get; set;
-        }
-
-        public static string localizaBanco
-        {
-            get; set;
-        }
-
-        public static string localizaCont
-        {
-            get; set;
-        }*/
     }
 }
 

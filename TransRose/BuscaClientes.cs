@@ -6,12 +6,11 @@
     using System.Drawing;
     using System.Windows.Forms;
 
-    public class BuscaClientes : Form
+    public class buscaClientes : Form
     {
         private Button botaoBuscar;
         private Button botaoSair;
         private VerCadastros chamaVerCadastros;
-        private IContainer components = null;
         private Label descreveBuscaCrianca;
         private Label descreveBuscaID;
         private Label descreveBuscaNome;
@@ -21,7 +20,7 @@
         private TextBox txtBuscaID;
         private TextBox txtBuscaNome;
 
-        public BuscaClientes(VerCadastros busca)
+        public buscaClientes(VerCadastros busca)
         {
             this.InitializeComponent();
             this.chamaVerCadastros = busca;
@@ -195,7 +194,7 @@
             this.botaoBuscar.UseVisualStyleBackColor = true;
             this.botaoBuscar.Click += new System.EventHandler(this.botaoBuscar_Click);
             // 
-            // BuscaClientes
+            // buscaClientes
             // 
             this.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -216,7 +215,7 @@
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(520, 260);
             this.MinimumSize = new System.Drawing.Size(520, 260);
-            this.Name = "BuscaClientes";
+            this.Name = "buscaClientes";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Buscar Cliente - Cadastro de Clientes - TransRose";

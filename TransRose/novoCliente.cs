@@ -1,24 +1,14 @@
 ﻿namespace WindowsFormsApplication2
 {
     using System;
+    using TransRose;
     using System.ComponentModel;
     using System.Data.OleDb;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Runtime.CompilerServices;
     using System.Threading;
     using System.Windows.Forms;
 
-    public class excluiCliente : Form
+    public class novoCliente : Form
     {
-        /*[CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private static string <ct>k__BackingField;
-        [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private static string <db>k__BackingField;
-        [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private static string <localizaBanco>k__BackingField;
-        [CompilerGenerated, DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private static string <localizaCont>k__BackingField;*/
         private ToolStripMenuItem arquivoToolStripMenuItem;
         private PictureBox cadastraCliente;
         private IContainer components = null;
@@ -73,14 +63,14 @@
         private MaskedTextBox txtValAnual;
         private ComboBox txtValContrato;
         private PictureBox voltarVerCadastros;
+        private manipulaArquivos arquivos;
 
-        public excluiCliente(string data, string contrato)
+        public novoCliente()
         {
             this.InitializeComponent();
-            db = data;
-            localizaBanco = @"C:\Windows\Temp\transrosedb\" + db + ".mdb";
-            ct = contrato;
-            localizaCont = @"C:\Windows\Temp\transrosedb\" + ct + ".doc";
+            arquivos = VerCadastros.getArquivos();
+            localizaBanco = @"C:\Windows\Temp\transrosedb\db" + arquivos.ano + ".mdb";
+            localizaCont = @"C:\Windows\Temp\transrosedb\ct" + arquivos.ano + ".doc";
         }
 
         private void cadastraCliente_Click(object sender, EventArgs e)
@@ -122,9 +112,9 @@
                     flag = false;
                 }
                 string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-                string str2 = "ID,Nome,Rua,NumCasa,Bairro,RG,[Orgão Expedidor],CPF,[Telefone Fixo],Celular,Contrato,Parcela,[Valor Anual],Criança,[Nome da escola],[Rua da escola],[Telefone da escola],[Bairro da escola],Apanha,Entrega";
+                string columns = "ID,Nome,Rua,NumCasa,Bairro,RG,[Orgão Expedidor],CPF,[Telefone Fixo],Celular,Contrato,Parcela,[Valor Anual],Criança,[Nome da escola],[Rua da escola],[Telefone da escola],[Bairro da escola],Apanha,Entrega";
                 object[] objArray1 = new object[] { 
-                    "INSERT INTO Cadastros(", str2, ") VALUES(", num, ",'", this.txtNome.Text, "','", this.txtRua.Text, "','", this.txtNumCasa.Text, "','", this.txtBairro.Text, "','", this.txtRG.Text, "', '", this.txtOrgao.Text,
+                    "INSERT INTO Cadastros(", columns, ") VALUES(", num, ",'", this.txtNome.Text, "','", this.txtRua.Text, "','", this.txtNumCasa.Text, "','", this.txtBairro.Text, "','", this.txtRG.Text, "', '", this.txtOrgao.Text,
                     "','", this.txtCPF.Text, "','", this.txtTelFixo.Text, "','", this.txtCel.Text, "', ", flag.ToString(), ",'", this.txtParc.Text, "','", this.txtValAnual.Text, "','", this.txtNomeCrianca.Text, "','", this.txtEscola.Text,
                     "','", this.txtRuaEscola.Text, "','", this.txtEscTel.Text, "','", this.txtBairroEscola.Text, "','", this.txtApanha.Text, "','", this.txtEnt.Text, "')"
                 };
@@ -136,7 +126,7 @@
                     connection.Open();
                     command.ExecuteNonQuery();
                     this.LimparCampos();
-                    new VerCadastros("", db, ct, "", "", "", true).CarregaDados();
+                    new VerCadastros(arquivos, "", "", "").CarregaDados();
                     MessageBox.Show("Cliente cadastrado com sucesso.");
                     this.notifyCadastroSucesso.Visible = true;
                     this.notifyCadastroSucesso.ShowBalloonTip(5);
@@ -154,15 +144,6 @@
             }
         }
 
-        /*protected override void Dispose(bool disposing)
-        {
-            if (disposing && (this.components > null))
-            {
-                this.components.Dispose();
-            }
-            base.Dispose(disposing);
-        }*/
-
         private void fecharToolStripMenuItem_Click(object sender, EventArgs e)
         {
             base.Close();
@@ -171,7 +152,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(excluiCliente));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(novoCliente));
             this.label1 = new System.Windows.Forms.Label();
             this.txtId = new System.Windows.Forms.TextBox();
             this.notifyCadastroSucesso = new System.Windows.Forms.NotifyIcon(this.components);
@@ -767,7 +748,7 @@
             this.pictureBox3.TabIndex = 21;
             this.pictureBox3.TabStop = false;
             // 
-            // excluiCliente
+            // novoCliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -825,7 +806,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1000, 800);
-            this.Name = "excluiCliente";
+            this.Name = "novoCliente";
             this.Text = "Novo Cliente - Cadastro de Clientes - TransRose";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.menuStrip1.ResumeLayout(false);
