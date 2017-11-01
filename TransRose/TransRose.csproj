@@ -116,6 +116,7 @@
     <Compile Include="buscaClientes.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="googleDriveAPI.cs" />
     <Compile Include="manipulaArquivos.cs" />
     <Compile Include="ConstruindoincluiRegistros.cs">
       <SubType>Form</SubType>

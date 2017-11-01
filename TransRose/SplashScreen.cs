@@ -25,6 +25,7 @@
 
         public SplashScreen()
         {
+            this.contexto = new manipulaArquivos();
             this.InitializeComponent();
             this.lbSelecioneAno.BackColor = Color.Transparent;
             this.imgLogoTransrose.BackColor = Color.Transparent;
@@ -144,8 +145,9 @@
 
         }
 
-        private void BaixaMenu()
+        private void criaDiretorioTemporario()
         {
+            
             DirectoryInfo info = new DirectoryInfo(@"C:\Windows\Temp\transrosedb\");
             try
             {
@@ -154,19 +156,6 @@
             catch (Exception)
             {
                 MessageBox.Show("Erro fatal: Não foi possível iniciar a aplicação, contate o suporte pois não foi possível criar o diret\x00f3rio, contate o suporte.", "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                Application.Exit();
-            }
-            try
-            {
-                WebClient client = new WebClient();
-                byte[] buffer = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.15.10/files/menu.mdb");
-                FileStream stream = System.IO.File.Create(@"C:\Windows\Temp\transrosedb\menu.mdb");
-                stream.Write(buffer, 0, buffer.Length);
-                stream.Close();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Erro fatal: Não foi possível baixar o banco de dados, contate o administrador da rede." , "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 Application.Exit();
             }
         }
@@ -213,7 +202,6 @@
 
         private void botaoEntrar_Click(object sender, EventArgs e)
         {
-            contexto = new manipulaArquivos();
             /// Verifica se usuário não selecionou um banco de dados válido
             if (cbRecebeAno.SelectedItem == null)
             {
@@ -272,9 +260,9 @@
                                 {
                                     contexto.criaArquivo("ct" + contexto.ano, "doc");
                                     contexto.criaArquivo("db" + contexto.ano, "mdb");
-                                    contexto.uparArquivo("ct" + contexto.ano + ".doc");
-                                    contexto.uparArquivo("db" + contexto.ano + ".mdb");
-                                    contexto.uparArquivo("menu.mdb");
+                                    contexto.uparArquivo("ct" + contexto.ano + ".doc", "application/msaccess");
+                                    contexto.uparArquivo("db" + contexto.ano + ".mdb", "application/msaccess");
+                                    contexto.uparArquivo("menu.mdb", "application/msaccess");
                                 }
                                 catch (Exception ex)
                                 {
@@ -296,7 +284,16 @@
                     else if (opcaoEUmNumero)
                     {
                         contexto.ano = ano;
-                        contexto.baixarArquivo();
+                        try
+                        {
+                            contexto.baixarArquivo("db" + contexto.ano + ".mdb");
+                            contexto.baixarArquivo("ct" + ano + ".doc");
+                        }
+                        catch(FileNotFoundException ex)
+                        {
+                            MessageBox.Show("Erro: " + ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                            Application.Exit();
+                        }
                         VerCadastros cadastros = new VerCadastros(contexto,"", "", "");
                         base.DialogResult = DialogResult.OK;
                     }
@@ -318,7 +315,8 @@
 
         private void SplashScreen_Load(object sender, EventArgs e)
         {
-            this.BaixaMenu();
+            this.criaDiretorioTemporario();
+            contexto.baixarArquivo("menu.mdb");
             this.preencheMenu();
         }
 

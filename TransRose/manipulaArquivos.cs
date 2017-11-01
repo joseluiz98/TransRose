@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using WindowsFormsApplication2;
-
 namespace TransRose
 {
     public class manipulaArquivos
@@ -17,7 +11,21 @@ namespace TransRose
         public string ct;
         public string db;
         public bool novoDb;
+        private static googleDriveAPI driveAPI;
 
+        public manipulaArquivos()
+        {
+            try
+            {
+                driveAPI = new googleDriveAPI();
+            }
+            catch(AggregateException e)
+            {
+                MessageBox.Show("Houve um erro ao tentar acessar os arquivos na nuvem, cheque as permissões.\n" + e.Message,
+                    "Erro ao contatar nuvem", MessageBoxButtons.OK);
+                Application.Exit();
+            }
+        }
         public void criaArquivo(string nomeArquivo, string extensaoArquivo)
         {
             //Tenta criar os arquivos localmente
@@ -48,43 +56,25 @@ namespace TransRose
                 Application.Exit();
             }
         }
-        public void baixarArquivo()
+        public void baixarArquivo(string nomeArquivo)
         {
-            db = "db" + ano;
-            ct = "ct" + ano;
             try
             {
-                WebClient client = new WebClient();
-                byte[] buffer = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.15.10/files/" + db + ".mdb");
-                FileStream stream = System.IO.File.Create(@"C:\Windows\Temp\transrosedb\" + db + ".mdb");
-                stream.Write(buffer, 0, buffer.Length);
-                stream.Close();
+                driveAPI.baixarArquivo(nomeArquivo, null);
             }
-            catch (Exception ex)
+            catch (FileNotFoundException ex)
             {
-                MessageBox.Show("Erro: " + ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                Application.Exit();
-            }
-            try
-            {
-                WebClient client3 = new WebClient();
-                byte[] buffer2 = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.15.10/files/" + ct + ".doc");
-                FileStream stream2 = System.IO.File.Create(@"C:\Windows\Temp\transrosedb\" + ct + ".doc");
-                stream2.Write(buffer2, 0, buffer2.Length);
-                stream2.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro: " + ex.Message, "", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+                MessageBox.Show(ex.Message, "Erro durante a conexão", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
         }
 
-        public void uparArquivo(string nomeArquivo)
+        public void uparArquivo(string nomeArquivo, string mimetype)
         {
             try
             {
-                FtpWebRequest request;
+                driveAPI.uparArquivo(nomeArquivo, mimetype);
+                /*FtpWebRequest request;
                 request = (FtpWebRequest)WebRequest.Create(new Uri("ftp://192.168.15.10/files/" + nomeArquivo));
                 request.Method = "STOR";
                 request.Proxy = null;
@@ -100,9 +90,9 @@ namespace TransRose
                 using (Stream stream6 = request.GetRequestStream())
                 {
                     stream6.Write(buffer3, 0, buffer3.Length);
-                }
+                }*/
             }
-            catch (Exception ex)
+            catch (IOException ex)
             {
                 MessageBox.Show(ex.Message, "Houve um erro durante a conexão com o servidor");
             }
@@ -170,7 +160,7 @@ namespace TransRose
             finally
             {
                 connection.Close();
-                uparArquivo("menu.mdb");
+                uparArquivo("menu.mdb", "application/msaccess");
                 Application.Exit();
             }
         }

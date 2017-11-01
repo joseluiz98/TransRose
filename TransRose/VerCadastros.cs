@@ -735,7 +735,6 @@
             this.txtTotalAno.Size = new System.Drawing.Size(68, 13);
             this.txtTotalAno.TabIndex = 47;
             this.txtTotalAno.Text = "#txtTotalAno";
-            this.txtTotalAno.Click += new System.EventHandler(this.label1_Click);
             // 
             // atualizaCliente
             // 
@@ -1124,7 +1123,7 @@
                 "UPDATE Cadastros SET Nome = '", txtNome.Text, "',Rua = '", txtRua.Text, "',Contrato = ", flag.ToString(), ",CPF = '", txtCPF.Text, "',RG = '", txtRG.Text, "',NumCasa = '", txtNumCasa.Text, "', Bairro = '", txtBairro.Text, "',[Telefone Fixo] = '", txtTelFixo.Text,
                 "',Celular = '", txtCel.Text, "',Criança = '", txtNomeCrianca.Text, "',[Nome da escola] = '", txtEscola.Text, "', [Rua da escola] = '", txtRuaEscola.Text, "',[Bairro da escola] = '", txtBairroEscola.Text, "',[Telefone da escola] = '", txtEscTel.Text, "',Apanha = '", txtApanha.Text, "', Entrega = '", txtEntrega.Text,
                 "' WHERE ID = ", idtrat
-            };
+                };
                 string cmdText = string.Concat(objArray1);
                 OleDbConnection connection = new OleDbConnection(connectionString);
                 OleDbCommand command = new OleDbCommand(cmdText, connection);
@@ -1171,10 +1170,10 @@
                 string cmdText = "SELECT *FROM Cadastros WHERE ID IS NOT NULL order by ID ASC";
                 OleDbConnection connection = new OleDbConnection(connectionString);
                 OleDbCommand command = new OleDbCommand(cmdText, connection);
+                connection.Open();
+                OleDbDataReader reader = command.ExecuteReader();
                 try
                 {
-                    connection.Open();
-                    OleDbDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
                         this.lbDescreveId.Text = Convert.ToInt32(reader["ID"]).ToString();
@@ -1211,11 +1210,8 @@
                             this.txtValContrato.Items.Add("Inativo");
                             this.txtValContrato.SelectedItem = "Inativo";
                         }
-                        reader.Close();
-                        connection.Close();
                         return;
                     }
-                    reader.Close();
                 }
                 catch (OleDbException exception)
                 {
@@ -1223,13 +1219,14 @@
                 }
                 finally
                 {
+                    reader.Close();
                     connection.Close();
                 }
             }
             else
             {
-                string str3 = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-                string str4 = "";
+                string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
+                string query = "";
                 if (BuscaID != "")
                 {
                     idtrat = Convert.ToInt32(BuscaID);
@@ -1237,64 +1234,64 @@
                 if (((BuscaID != "") & (BuscaNome != "")) & (BuscaCrianca != ""))
                 {
                     object[] objArray1 = new object[] { "SELECT *FROM Cadastros WHERE ID = ", idtrat, " AND Nome LIKE '%", BuscaNome, "%' AND Criança LIKE '%", BuscaCrianca, "%'" };
-                    str4 = string.Concat(objArray1);
+                    query = string.Concat(objArray1);
                 }
                 else if (((BuscaID != "") & (BuscaNome == "")) & (BuscaCrianca == ""))
                 {
-                    str4 = ("SELECT *FROM Cadastros WHERE ID = " + idtrat) ?? "";
+                    query = ("SELECT *FROM Cadastros WHERE ID = " + idtrat) ?? "";
                 }
                 else if (((BuscaID == "") & (BuscaNome != "")) & (BuscaCrianca == ""))
                 {
-                    str4 = "SELECT *FROM Cadastros WHERE Nome LIKE '%" + BuscaNome + "%'";
+                    query = "SELECT *FROM Cadastros WHERE Nome LIKE '%" + BuscaNome + "%'";
                 }
                 else if (((BuscaID == "") & (BuscaNome == "")) & (BuscaCrianca != ""))
                 {
-                    str4 = "SELECT *FROM Cadastros WHERE Criança LIKE '%" + BuscaCrianca + "%'";
+                    query = "SELECT *FROM Cadastros WHERE Criança LIKE '%" + BuscaCrianca + "%'";
                 }
                 else if (((BuscaID != "") & (BuscaNome != "")) & (BuscaCrianca == ""))
                 {
                     object[] objArray2 = new object[] { "SELECT *FROM Cadastros WHERE ID = ", idtrat, " AND Nome LIKE '%", BuscaNome, "%'" };
-                    str4 = string.Concat(objArray2);
+                    query = string.Concat(objArray2);
                 }
                 else if (((BuscaID != "") & (BuscaNome == "")) & (BuscaCrianca != ""))
                 {
                     object[] objArray3 = new object[] { "SELECT *FROM Cadastros WHERE ID = ", idtrat, " AND Criança LIKE '%", BuscaCrianca, "%'" };
-                    str4 = string.Concat(objArray3);
+                    query = string.Concat(objArray3);
                 }
                 else if (((BuscaID == "") & (BuscaNome != "")) & (BuscaCrianca != ""))
                 {
                     string[] textArray1 = new string[] { "SELECT *FROM Cadastros WHERE Nome LIKE '%", BuscaNome, "%' AND Criança LIKE '%", BuscaCrianca, "%'" };
-                    str4 = string.Concat(textArray1);
+                    query = string.Concat(textArray1);
                 }
-                OleDbConnection connection2 = new OleDbConnection(str3);
-                OleDbCommand command2 = new OleDbCommand(str4, connection2);
+                OleDbConnection connection = new OleDbConnection(connectionString);
+                OleDbCommand command = new OleDbCommand(query, connection);
+                connection.Open();
+                OleDbDataReader reader = command.ExecuteReader();
                 try
                 {
-                    connection2.Open();
-                    OleDbDataReader reader2 = command2.ExecuteReader();
-                    if (reader2.HasRows)
+                    if (reader.HasRows)
                     {
-                        while (reader2.Read())
+                        while (reader.Read())
                         {
-                            this.lbDescreveId.Text = Convert.ToInt32(reader2["ID"]).ToString();
-                            this.txtNome.Text = reader2["Nome"].ToString();
-                            this.txtRua.Text = reader2["Rua"].ToString();
-                            this.txtNumCasa.Text = reader2["NumCasa"].ToString();
-                            this.txtBairro.Text = reader2["Bairro"].ToString();
-                            this.txtRG.Text = reader2["RG"].ToString();
-                            this.txtCPF.Text = reader2["CPF"].ToString();
-                            this.txtTelFixo.Text = reader2["Telefone Fixo"].ToString();
-                            this.txtCel.Text = reader2["Celular"].ToString();
-                            this.txtValContrato.Items.Add(reader2["Contrato"].ToString());
-                            this.txtValContrato.SelectedItem = reader2["Contrato"].ToString();
-                            this.txtParcela.Text = "R$" + reader2["Parcela"] + " Reais".ToString();
-                            this.txtTotalAno.Text = "R$" + reader2["Valor Anual"] + " Reais".ToString();
-                            this.txtNomeCrianca.Text = reader2["Criança"].ToString();
-                            this.txtEscola.Text = reader2["Nome da escola"].ToString();
-                            this.txtRuaEscola.Text = reader2["Rua da escola"].ToString();
-                            this.txtBairroEscola.Text = reader2["Bairro da escola"].ToString();
-                            this.txtApanha.Text = reader2["Apanha"] + " Hrs.".ToString();
-                            this.txtEntrega.Text = reader2["Entrega"] + " Hrs.".ToString();
+                            this.lbDescreveId.Text = Convert.ToInt32(reader["ID"]).ToString();
+                            this.txtNome.Text = reader["Nome"].ToString();
+                            this.txtRua.Text = reader["Rua"].ToString();
+                            this.txtNumCasa.Text = reader["NumCasa"].ToString();
+                            this.txtBairro.Text = reader["Bairro"].ToString();
+                            this.txtRG.Text = reader["RG"].ToString();
+                            this.txtCPF.Text = reader["CPF"].ToString();
+                            this.txtTelFixo.Text = reader["Telefone Fixo"].ToString();
+                            this.txtCel.Text = reader["Celular"].ToString();
+                            this.txtValContrato.Items.Add(reader["Contrato"].ToString());
+                            this.txtValContrato.SelectedItem = reader["Contrato"].ToString();
+                            this.txtParcela.Text = "R$" + reader["Parcela"] + " Reais".ToString();
+                            this.txtTotalAno.Text = "R$" + reader["Valor Anual"] + " Reais".ToString();
+                            this.txtNomeCrianca.Text = reader["Criança"].ToString();
+                            this.txtEscola.Text = reader["Nome da escola"].ToString();
+                            this.txtRuaEscola.Text = reader["Rua da escola"].ToString();
+                            this.txtBairroEscola.Text = reader["Bairro da escola"].ToString();
+                            this.txtApanha.Text = reader["Apanha"] + " Hrs.".ToString();
+                            this.txtEntrega.Text = reader["Entrega"] + " Hrs.".ToString();
                             if (this.txtValContrato.SelectedItem.ToString() == "True")
                             {
                                 this.txtValContrato.Items.Clear();
@@ -1308,13 +1305,12 @@
                                 this.txtValContrato.SelectedItem = "Não";
                             }
                         }
-                        reader2.Close();
                     }
                     else
                     {
                         MessageBox.Show("Não foram encontrados clientes com os dados especificados, tente novamente.", "Sem resultados", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                        reader2.Close();
-                        connection2.Close();
+                        reader.Close();
+                        connection.Close();
                     }
                 }
                 catch (OleDbException exception)
@@ -1323,7 +1319,8 @@
                 }
                 finally
                 {
-                    connection2.Close();
+                    reader.Close();
+                    connection.Close();
                 }
             }
         }
@@ -1373,10 +1370,6 @@
         private void exitButton_Click(object sender, EventArgs e)
         {
             Application.Exit();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
         }
 
         private void notifyCadastro_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -1534,7 +1527,7 @@
 
         public void mostraDialogoSalvar(FormClosingEventArgs e)
         {
-            if(contexto == null)
+            if(contexto.ano == 0 || contexto == null)
             {
                 Application.Exit();
                 return;
@@ -1542,9 +1535,9 @@
             DialogResult mensagemSaindo = MessageBox.Show("Deseja salvar as alterações?", "Já está saindo?", MessageBoxButtons.YesNoCancel);
             if (mensagemSaindo == DialogResult.Yes)
             {
-                contexto.uparArquivo("db" + contexto.ano + ".mdb");
-                contexto.uparArquivo("ct" + contexto.ano + ".doc");
-                contexto.uparArquivo("menu.mdb");
+                contexto.uparArquivo("db" + contexto.ano + ".mdb", "application/msaccess");
+                contexto.uparArquivo("ct" + contexto.ano + ".doc", "application/msword");
+                contexto.uparArquivo("menu.mdb", "application/msaccess");
                 Application.Exit();
             }
             else if (mensagemSaindo == DialogResult.No)
@@ -1611,8 +1604,8 @@
                         catch(Exception ex)
                         {
                             MessageBox.Show(ex.Message, "Erro", MessageBoxButtons.OK);
-                            contexto.uparArquivo("db" + contexto.ano + ".mdb");
-                            contexto.uparArquivo("ct" + contexto.ano + ".doc");
+                            contexto.uparArquivo("db" + contexto.ano + ".mdb", "application/msaccess");
+                            contexto.uparArquivo("ct" + contexto.ano + ".doc", "application/msword");
                         }
                         finally
                         {
@@ -1622,8 +1615,6 @@
                 }
             }
         }
-
-        
 
         private void incluirRegistros(object sender, EventArgs e)
         {
