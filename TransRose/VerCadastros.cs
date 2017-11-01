@@ -1527,7 +1527,7 @@
 
         public void mostraDialogoSalvar(FormClosingEventArgs e)
         {
-            if(contexto.ano == 0 || contexto == null)
+            if(contexto == null || contexto.ano == 0)
             {
                 Application.Exit();
                 return;

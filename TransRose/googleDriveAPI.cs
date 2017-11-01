@@ -111,9 +111,9 @@ namespace TransRose
             try
             {
                 FilesResource.ListRequest listRequest = service.Files.List();
-                listRequest.Fields = "nextPageToken, files(name,id,parents)";
+                listRequest.Fields = "nextPageToken, files(name,id,parents,trashed)";
                 listRequest.PageToken = pageToken;
-                listRequest.Q = "name='" + nomeDoArquivo + "'";
+                listRequest.Q = "name='" + nomeDoArquivo + "' and trashed = false";
 
                 //Procura pelo arquivo para efetuar o download
                 var request = listRequest.Execute();
@@ -181,18 +181,32 @@ namespace TransRose
         {
             try
             {
+                //Configura o caminho do arquivo
                 string path = @"C:\Windows\Temp\transrosedb\" + nomeArquivo;
-                var arquivo = buscarArquivo(ref nomeArquivo,null);
-                //var arquivo = new Google.Apis.Drive.v3.Data.File();
-                //arquivo.Name = System.IO.Path.GetFileName(path);
-                //arquivo.Trashed = true;
-                using (var stream = new System.IO.FileStream(path, System.IO.FileMode.Open, System.IO.FileAccess.Read))
+                var arquivo = buscarArquivo(ref nomeArquivo, null);
+                //Configura o nome e a pasta onde o arquivo deve ser upado
+                var novoArquivo = new Google.Apis.Drive.v3.Data.File()
                 {
-                    var request = service.Files.Create(arquivo, stream, mimetype);
+                    Name = arquivo.Name,
+                    Parents = arquivo.Parents
+                };
+
+                //Tenta ler e upar o arquivo
+                FilesResource.CreateMediaUpload request;
+                using (var stream = new System.IO.FileStream(path, System.IO.FileMode.Open))
+                {
+                    request = service.Files.Create(novoArquivo, stream, mimetype);
                     request.Upload();
                 }
+                //Recupera a resposta da tentativa de upload
+                var file = request.ResponseBody;
+                //Se upou, então deleta o arquivo antigo
+                if (file != null)
+                {
+                    service.Files.Delete(arquivo.Id).Execute();
+                }
             }
-            catch(IOException ex)
+            catch (IOException ex)
             {
                 throw new IOException(ex.Message);
             }
