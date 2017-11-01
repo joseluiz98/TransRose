@@ -92,7 +92,7 @@ namespace TransRose
                                 }
                         }
                     };
-                request.Download(stream);
+                request.DownloadWithStatus(stream);
                 stream.Close();
             }
             catch (System.Net.Http.HttpRequestException ex)
