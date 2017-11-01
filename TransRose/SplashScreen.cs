@@ -235,12 +235,9 @@
                                 contexto.ano = criaNovoDb.getAno();
                                 string localizaBanco = @"C:\Windows\Temp\transrosedb\menu.mdb";
                                 string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + localizaBanco + "'";
-                                object[] query = new object[] { 
-                                    "INSERT INTO menu VALUES('" + contexto.ano + "')"
-                                };
-                                string cmdText = string.Concat(query);
+                                string query = "INSERT INTO menu VALUES('" + contexto.ano + "')";
                                 OleDbConnection connection = new OleDbConnection(connectionString);
-                                OleDbCommand command = new OleDbCommand(cmdText, connection);
+                                OleDbCommand command = new OleDbCommand(query, connection);
                                 try
                                 {
                                     connection.Open();
@@ -260,7 +257,7 @@
                                 {
                                     contexto.criaArquivo("ct" + contexto.ano, "doc");
                                     contexto.criaArquivo("db" + contexto.ano, "mdb");
-                                    contexto.uparArquivo("ct" + contexto.ano + ".doc", "application/msaccess");
+                                    contexto.uparArquivo("ct" + contexto.ano + ".doc", "application/msword");
                                     contexto.uparArquivo("db" + contexto.ano + ".mdb", "application/msaccess");
                                     contexto.uparArquivo("menu.mdb", "application/msaccess");
                                 }

@@ -35,19 +35,13 @@ namespace TransRose
                 WebClient client = new WebClient();
                 if (extensaoArquivo == "doc")
                 {
-                    byte[] buffer = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.15.10/files/ct2016.doc");
-                    FileStream stream = System.IO.File.Create(@"C:\Windows\Temp\transrosedb\ct" + ano + ".doc");
-                    stream.Write(buffer, 0, buffer.Length);
-                    stream.Close();
+                    driveAPI.baixarArquivo("ct2016.doc", "ct" + ano + ".doc", null);
                 }
                 //Cria o banco
                 else
                 {
-                    byte[] buffer = new WebClient { Credentials = new NetworkCredential("", "") }.DownloadData("ftp://192.168.15.10/files/db2016.mdb");
-                    FileStream stream = System.IO.File.Create(@"C:\Windows\Temp\transrosedb\db" + ano + ".mdb");
-                    stream.Write(buffer, 0, buffer.Length);
-                    stream.Close();
-                    this.apagaBanco();
+                    driveAPI.baixarArquivo("db2016.mdb", "db" + ano + ".mdb", null);
+                    this.limparBanco();
                 }
             }
             catch (Exception ex)
@@ -74,23 +68,6 @@ namespace TransRose
             try
             {
                 driveAPI.uparArquivo(nomeArquivo, mimetype);
-                /*FtpWebRequest request;
-                request = (FtpWebRequest)WebRequest.Create(new Uri("ftp://192.168.15.10/files/" + nomeArquivo));
-                request.Method = "STOR";
-                request.Proxy = null;
-                request.UseBinary = true;
-                request.UsePassive = true;
-                request.Credentials = new NetworkCredential("", "");
-                FileInfo info3 = new FileInfo(@"C:\Windows\Temp\transrosedb\" + nomeArquivo);
-                byte[] buffer3 = new byte[info3.Length];
-                using (FileStream stream5 = info3.OpenRead())
-                {
-                    stream5.Read(buffer3, 0, Convert.ToInt32(info3.Length));
-                }
-                using (Stream stream6 = request.GetRequestStream())
-                {
-                    stream6.Write(buffer3, 0, buffer3.Length);
-                }*/
             }
             catch (IOException ex)
             {
@@ -98,7 +75,7 @@ namespace TransRose
             }
         }
 
-        private void apagaBanco()
+        private void limparBanco()
         {
             string str = @"C:\Windows\Temp\transrosedb\db" + ano + ".mdb";
             string connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + str + "'";
@@ -120,14 +97,11 @@ namespace TransRose
             }
         }
 
-        public bool excluiArquivo(ref string str)
+        public bool excluiArquivo(ref string nomeArquivo)
         {
             try
             {
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(str);
-                request.Credentials = new NetworkCredential("", "");
-                request.Method = WebRequestMethods.Ftp.DeleteFile;
-                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                driveAPI.deletaArquivo(ref nomeArquivo);
                 return true;
             }
             catch (Exception)
@@ -152,6 +126,11 @@ namespace TransRose
                 {
                     throw new Exception("Não foi possível remover o ano atual do menu.");
                 }
+                else
+                {
+                    connection.Close();
+                    uparArquivo("menu.mdb", "application/msaccess");
+                }
             }
             catch (OleDbException exception)
             {
@@ -160,7 +139,6 @@ namespace TransRose
             finally
             {
                 connection.Close();
-                uparArquivo("menu.mdb", "application/msaccess");
                 Application.Exit();
             }
         }

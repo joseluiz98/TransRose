@@ -1582,20 +1582,20 @@
 
         private void excluiBanco(object sender, EventArgs e)
         {
-            string str;
+            string nomeArquivo;
             if (MessageBox.Show("Deseja mesmo excluir o banco de dados do ano que está a ser utilizado? Esta ação não pode ser revertida!", "Excluir banco de dados do ano atual", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 ///Exclui Contrato do ano
-                str = "ftp://192.168.15.10/files/ct" + contexto.ano + ".doc";
+                nomeArquivo = "ct" + contexto.ano + ".doc";
 
                 ///Se funcionar excluir Banco de Dados do ano
-                if (contexto.excluiArquivo(ref str) == true)
+                if (contexto.excluiArquivo(ref nomeArquivo) == true)
                 {
                     /// Exclui Banco de Dados do ano
-                    str = "ftp://192.168.15.10/files/db" + contexto.ano + ".mdb";
+                    nomeArquivo = "db" + contexto.ano + ".mdb";
 
                     ///Se funcionar então exclui o ano do menu da SplashScreen
-                    if (contexto.excluiArquivo(ref str) == true)
+                    if (contexto.excluiArquivo(ref nomeArquivo) == true)
                     {
                         try
                         {

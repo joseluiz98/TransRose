@@ -60,6 +60,52 @@ namespace TransRose
             }
         }
 
+        public void baixarArquivo(string nomeDoArquivo, string novoNomeDoArquivo, string pageToken)
+        {
+            try
+            {
+                Google.Apis.Drive.v3.Data.File file = buscarArquivo(ref nomeDoArquivo, pageToken);
+                var request = service.Files.Get(file.Id);
+                var stream = new MemoryStream();
+
+                // Add a handler which will be notified on progress changes.
+                // It will notify on each chunk download and when the
+                // download is completed or failed.
+                request.MediaDownloader.ProgressChanged +=
+                    (IDownloadProgress progress) =>
+                    {
+                        switch (progress.Status)
+                        {
+                            case DownloadStatus.Downloading:
+                                {
+                                    Console.WriteLine(progress.BytesDownloaded);
+                                    break;
+                                }
+                            case DownloadStatus.Completed:
+                                {
+                                    salvarArquivo(stream, @"C:\Windows\Temp\transrosedb\" + novoNomeDoArquivo);
+                                    break;
+                                }
+                            case DownloadStatus.Failed:
+                                {
+                                    throw new Exception("O download falhou.");
+                                }
+                        }
+                    };
+                request.DownloadWithStatus(stream);
+                stream.Close();
+            }
+            catch (System.Net.Http.HttpRequestException ex)
+            {
+                MessageBox.Show(ex.Message, "Erro durante a conexão", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+            }
+            catch (Exception ex)
+            {
+                throw new FileNotFoundException(ex.Message);
+            }
+        }
+
         public void baixarArquivo(string nomeDoArquivo, string pageToken)
         {
             try
@@ -133,7 +179,7 @@ namespace TransRose
                 }
                 else
                 {
-                    throw new FileNotFoundException("Não foi possível encontrar o arquivo.");
+                    return null;
                 }
                 return null;
             }
@@ -143,7 +189,7 @@ namespace TransRose
             }
         }
 
-        private static void listarArquivos(DriveService service, ref string pageToken)
+        private static void listarArquivos(ref string pageToken)
         {
             // Define parameters of request.
             FilesResource.ListRequest listRequest = service.Files.List();
@@ -185,11 +231,24 @@ namespace TransRose
                 string path = @"C:\Windows\Temp\transrosedb\" + nomeArquivo;
                 var arquivo = buscarArquivo(ref nomeArquivo, null);
                 //Configura o nome e a pasta onde o arquivo deve ser upado
-                var novoArquivo = new Google.Apis.Drive.v3.Data.File()
+                Google.Apis.Drive.v3.Data.File novoArquivo;
+                if (arquivo != null)
                 {
-                    Name = arquivo.Name,
-                    Parents = arquivo.Parents
-                };
+                    novoArquivo = new Google.Apis.Drive.v3.Data.File()
+                    {
+                        Name = arquivo.Name,
+                        Parents = arquivo.Parents
+                    };
+                }
+                else
+                {
+                    novoArquivo = new Google.Apis.Drive.v3.Data.File();
+                    novoArquivo.Name = nomeArquivo;
+                    IList<string> parents = new List<string>();
+                    parents.Add("0B7KY7uiORovwb3VpN0lrNzFwUFU");
+                    novoArquivo.Parents = parents;
+                    //novoArquivo.Parents = new IList<> parentsList = { "dsaf"};
+                }
 
                 //Tenta ler e upar o arquivo
                 FilesResource.CreateMediaUpload request;
@@ -201,7 +260,7 @@ namespace TransRose
                 //Recupera a resposta da tentativa de upload
                 var file = request.ResponseBody;
                 //Se upou, então deleta o arquivo antigo
-                if (file != null)
+                if (file != null && arquivo != null)
                 {
                     service.Files.Delete(arquivo.Id).Execute();
                 }
@@ -210,6 +269,20 @@ namespace TransRose
             {
                 throw new IOException(ex.Message);
             }
+        }
+
+        public void deletaArquivo(ref string nomeArquivo)
+        {
+            Google.Apis.Drive.v3.Data.File arquivo = buscarArquivo(ref nomeArquivo, null);
+            if (arquivo != null)
+            {
+                service.Files.Delete(arquivo.Id).Execute();
+            }
+            else
+            {
+                throw new FileNotFoundException("Erro, não foi possível encontrar o arquivo!");
+            }
+                       
         }
     }
 }
