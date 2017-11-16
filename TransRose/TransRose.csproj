@@ -116,12 +116,18 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="googleDriveAPI.cs" />
-    <Compile Include="manipulaArquivos.cs" />
-    <Compile Include="ConstruindoincluiRegistros.cs">
+    <Compile Include="importaRegistrosDialogo.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConstruindoincluiRegistros.Designer.cs">
-      <DependentUpon>ConstruindoincluiRegistros.cs</DependentUpon>
+    <Compile Include="importaRegistrosDialogo.Designer.cs">
+      <DependentUpon>importaRegistrosDialogo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="manipulaArquivos.cs" />
+    <Compile Include="importaRegistros.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="importaRegistros.Designer.cs">
+      <DependentUpon>importaRegistros.cs</DependentUpon>
     </Compile>
     <Compile Include="novoCliente.cs">
       <SubType>Form</SubType>
@@ -146,11 +152,17 @@
     <EmbeddedResource Include="buscaClientes.resx">
       <DependentUpon>buscaClientes.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConstruindoincluiRegistros.resx">
-      <DependentUpon>ConstruindoincluiRegistros.cs</DependentUpon>
+    <EmbeddedResource Include="importaRegistros.resx">
+      <DependentUpon>importaRegistros.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="importaRegistrosDialogo.resx">
+      <DependentUpon>importaRegistrosDialogo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="novoCliente.resx">
       <DependentUpon>novoCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="novoDB.resx">
+      <DependentUpon>novoDB.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ProgressBar.resx">
       <DependentUpon>ProgressBar.cs</DependentUpon>

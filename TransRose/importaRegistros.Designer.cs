@@ -1,6 +1,6 @@
 ﻿namespace TransRose
 {
-    partial class ConstruindoincluiRegistro
+    partial class importaRegistros
     {
         /// <summary>
         /// Required designer variable.
@@ -51,14 +51,14 @@
             this.checkedListBox1.Size = new System.Drawing.Size(482, 349);
             this.checkedListBox1.TabIndex = 1;
             // 
-            // ConstruindoincluiRegistro
+            // importaRegistros
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(614, 457);
             this.Controls.Add(this.checkedListBox1);
             this.Controls.Add(this.label1);
-            this.Name = "ConstruindoincluiRegistro";
+            this.Name = "importaRegistros";
             this.Text = "incluiRegistros";
             this.Load += new System.EventHandler(this.incluiRegistros_Load);
             this.ResumeLayout(false);

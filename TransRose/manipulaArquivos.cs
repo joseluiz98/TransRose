@@ -2,15 +2,14 @@
 using System.Data.OleDb;
 using System.IO;
 using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace TransRose
 {
     public class manipulaArquivos
     {
         public int ano;
-        public string ct;
-        public string db;
-        public bool novoDb;
         private static googleDriveAPI driveAPI;
 
         public manipulaArquivos()
@@ -32,7 +31,6 @@ namespace TransRose
             try
             {
                 //Cria o contrato
-                WebClient client = new WebClient();
                 if (extensaoArquivo == "doc")
                 {
                     driveAPI.baixarArquivo("ct2016.doc", "ct" + ano + ".doc", null);
@@ -50,11 +48,14 @@ namespace TransRose
                 Application.Exit();
             }
         }
+
         public void baixarArquivo(string nomeArquivo)
         {
             try
             {
                 driveAPI.baixarArquivo(nomeArquivo, null);
+                //var task = Task.Run(async () => { await driveAPI.baixarArquivo(nomeArquivo, null); });
+                //task.Wait();
             }
             catch (FileNotFoundException ex)
             {

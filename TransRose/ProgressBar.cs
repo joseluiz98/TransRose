@@ -13,14 +13,23 @@ namespace TransRose
     public partial class ProgressBar : Form
     {
         public static int tamanho;
-        public ProgressBar(int TAM)
+        public ProgressBar()
         {
             InitializeComponent();
-            tamanho = TAM;
+            //tamanho = TAM;
 
             // Sets the progress bar's Maximum property to
             // the total number of records to be created.
-            progressBar1.Maximum = tamanho;
+            //progressBar1.Maximum = tamanho;
+            //progressBar1.Show();
+        }
+
+        public void setValor(int v)
+        {
+            if (progressBar1.InvokeRequired)
+                progressBar1.BeginInvoke((MethodInvoker) delegate {
+                    progressBar1.Value = v;
+                });
         }
 
         public void avancaBarra()

@@ -11,14 +11,14 @@ using System.Threading;
 
 namespace TransRose
 {
-    public partial class ConstruindoincluiRegistro : Form
+    public partial class importaRegistros : Form
     {
 
-        public ConstruindoincluiRegistro()
+        public importaRegistros()
         {
             InitializeComponent();
 
-            ProgressBar Progress = new ProgressBar(50);
+            /*ProgressBar Progress = new ProgressBar(50);
             Progress.Show();
             for (int i = 1; i<=50; i++)
             {
@@ -27,7 +27,7 @@ namespace TransRose
                 Thread.Sleep(40);
             }
 
-            Progress.Close();
+            Progress.Close();*/
         }
 
         private void incluiRegistros_Load(object sender, EventArgs e)

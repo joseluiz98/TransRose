@@ -22,53 +22,69 @@
 
         private void InitializeComponent()
         {
-            this.label1 = new Label();
-            this.recebeAnoNovoDB = new TextBox();
-            this.btEnviaBanco = new Button();
-            this.btSair = new Button();
-            base.SuspendLayout();
+            this.label1 = new System.Windows.Forms.Label();
+            this.recebeAnoNovoDB = new System.Windows.Forms.TextBox();
+            this.btEnviaBanco = new System.Windows.Forms.Button();
+            this.btSair = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // label1
+            // 
             this.label1.AutoSize = true;
-            this.label1.Location = new Point(0x72, 30);
+            this.label1.Location = new System.Drawing.Point(114, 30);
             this.label1.Name = "label1";
-            this.label1.Size = new Size(0xbb, 13);
+            this.label1.Size = new System.Drawing.Size(187, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Qual o ano do novo banco de dados?";
-            this.recebeAnoNovoDB.Location = new Point(0x91, 0x3f);
+            // 
+            // recebeAnoNovoDB
+            // 
+            this.recebeAnoNovoDB.Location = new System.Drawing.Point(145, 63);
             this.recebeAnoNovoDB.Name = "recebeAnoNovoDB";
-            this.recebeAnoNovoDB.Size = new Size(100, 20);
+            this.recebeAnoNovoDB.Size = new System.Drawing.Size(100, 20);
             this.recebeAnoNovoDB.TabIndex = 1;
-            this.btEnviaBanco.FlatStyle = FlatStyle.Flat;
-            this.btEnviaBanco.Location = new Point(0x131, 0x68);
+            // 
+            // btEnviaBanco
+            // 
+            this.btEnviaBanco.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btEnviaBanco.Location = new System.Drawing.Point(305, 104);
             this.btEnviaBanco.Name = "btEnviaBanco";
-            this.btEnviaBanco.Size = new Size(0x4b, 0x17);
+            this.btEnviaBanco.Size = new System.Drawing.Size(75, 23);
             this.btEnviaBanco.TabIndex = 2;
             this.btEnviaBanco.Text = "Criar Banco";
             this.btEnviaBanco.UseVisualStyleBackColor = true;
-            this.btEnviaBanco.Click += new EventHandler(this.btEnviaBanco_Click);
-            this.btSair.FlatStyle = FlatStyle.Flat;
-            this.btSair.Location = new Point(0xd6, 0x68);
+            this.btEnviaBanco.Click += new System.EventHandler(this.btEnviaBanco_Click);
+            // 
+            // btSair
+            // 
+            this.btSair.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btSair.Location = new System.Drawing.Point(214, 104);
             this.btSair.Name = "btSair";
-            this.btSair.Size = new Size(0x4b, 0x17);
+            this.btSair.Size = new System.Drawing.Size(75, 23);
             this.btSair.TabIndex = 3;
             this.btSair.Text = "Sair";
             this.btSair.UseVisualStyleBackColor = true;
-            this.btSair.Click += new EventHandler(this.btSair_Click);
-            base.AutoScaleDimensions = new SizeF(6f, 13f);
-            base.AutoScaleMode = AutoScaleMode.Font;
-            base.ClientSize = new Size(0x188, 0x8b);
-            base.ControlBox = false;
-            base.Controls.Add(this.btSair);
-            base.Controls.Add(this.btEnviaBanco);
-            base.Controls.Add(this.recebeAnoNovoDB);
-            base.Controls.Add(this.label1);
-            base.FormBorderStyle = FormBorderStyle.FixedSingle;
-            base.Name = "novoDB";
-            base.ShowInTaskbar = false;
-            base.StartPosition = FormStartPosition.CenterScreen;
+            this.btSair.Click += new System.EventHandler(this.btSair_Click);
+            // 
+            // novoDB
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(392, 139);
+            this.ControlBox = false;
+            this.Controls.Add(this.btSair);
+            this.Controls.Add(this.btEnviaBanco);
+            this.Controls.Add(this.recebeAnoNovoDB);
+            this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Name = "novoDB";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cadastrar banco";
-            base.TopMost = true;
-            base.ResumeLayout(false);
-            base.PerformLayout();
+            this.TopMost = true;
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         private void btSair_Click(object sender, EventArgs e)

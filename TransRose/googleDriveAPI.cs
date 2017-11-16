@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TransRose
@@ -56,7 +57,14 @@ namespace TransRose
         {
             using (System.IO.FileStream file = new System.IO.FileStream(saveTo, System.IO.FileMode.Create, System.IO.FileAccess.Write))
             {
-                stream.WriteTo(file);
+                try
+                {
+                    stream.WriteTo(file);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Erro ao salvar arquivo!", MessageBoxButtons.OK);
+                }
             }
         }
 
@@ -106,13 +114,19 @@ namespace TransRose
             }
         }
 
-        public void baixarArquivo(string nomeDoArquivo, string pageToken)
+        public async Task baixarArquivo(string nomeDoArquivo, string pageToken)
         {
             try
             {
                 Google.Apis.Drive.v3.Data.File file = buscarArquivo(ref nomeDoArquivo, pageToken);
                 var request = service.Files.Get(file.Id);
                 var stream = new MemoryStream();
+                // chunk size multiple of 256KB. I kept minimum.
+                request.MediaDownloader.ChunkSize = (256 * 1024);
+                ProgressBar pb = new ProgressBar();
+                pb.progressBar1.Maximum = 100;
+                pb.Show();
+                pb.progressBar1.Show();
 
                 // Add a handler which will be notified on progress changes.
                 // It will notify on each chunk download and when the
@@ -124,12 +138,24 @@ namespace TransRose
                         {
                             case DownloadStatus.Downloading:
                                 {
-                                    Console.WriteLine(progress.BytesDownloaded);
+                                    pb.BeginInvoke((MethodInvoker)delegate
+                                    {
+                                        double bytesIn = double.Parse(progress.BytesDownloaded.ToString());
+                                        double totalBytes = double.Parse(file.Size.ToString());
+                                        double percentage = bytesIn / totalBytes * 100;
+                                        pb.progressBar1.Value = int.Parse(Math.Truncate(percentage).ToString());
+                                    });
+                                    //Console.WriteLine(progress.BytesDownloaded);
                                     break;
                                 }
                             case DownloadStatus.Completed:
                                 {
+                                    pb.BeginInvoke((MethodInvoker)delegate
+                                    {
+                                        pb.Close();
+                                    });
                                     salvarArquivo(stream, @"C:\Windows\Temp\transrosedb\" + file.Name);
+                                    stream.Close();
                                     break;
                                 }
                             case DownloadStatus.Failed:
@@ -138,15 +164,14 @@ namespace TransRose
                                 }
                         }
                     };
-                request.DownloadWithStatus(stream);
-                stream.Close();
+                request.DownloadAsync(stream);
             }
             catch (System.Net.Http.HttpRequestException ex)
             {
                 MessageBox.Show(ex.Message, "Erro durante a conexão", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new FileNotFoundException(ex.Message);
             }
@@ -157,7 +182,7 @@ namespace TransRose
             try
             {
                 FilesResource.ListRequest listRequest = service.Files.List();
-                listRequest.Fields = "nextPageToken, files(name,id,parents,trashed)";
+                listRequest.Fields = "nextPageToken, files(name,id,parents,trashed,size)";
                 listRequest.PageToken = pageToken;
                 listRequest.Q = "name='" + nomeDoArquivo + "' and trashed = false";
 

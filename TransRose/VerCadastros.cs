@@ -1618,7 +1618,7 @@
 
         private void incluirRegistros(object sender, EventArgs e)
         {
-            new ConstruindoincluiRegistro().Show();
+            new importaRegistros().Show();
         }
     }
 }

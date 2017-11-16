@@ -168,19 +168,18 @@
 
         private void preencheMenu()
         {
-            //List<string> arrayTxt = File.ReadAllLines(@"C:\Windows\Temp\transrosedb\array.txt").ToList();
-            string arquivoBanco= @"C:\Windows\Temp\transrosedb\menu.mdb";
+            string arquivoBanco = @"C:\Windows\Temp\transrosedb\menu.mdb";
             string connString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source='" + arquivoBanco + "'";
             string query = "SELECT ano FROM menu";
             OleDbConnection connection = new OleDbConnection(connString);
             try
-            {                
-                // Create data adapter object 
+            {
+                // Cria o objeto que interpretará os dados do banco
                 OleDbDataAdapter dataAdapter = new OleDbDataAdapter(query, connection);
-                // Create a dataset object and fill with data using data adapter's Fill method 
+                // Cria objeto que receberá o conjunto dos dados do banco
                 DataSet dataSet = new DataSet();
                 dataAdapter.Fill(dataSet, "menu");
-                // Attach dataset's DefaultView to the combobox 
+                // Anexa os dados deste conjunto ao combo box
                 cbRecebeAno.DataSource = dataSet.Tables["menu"].DefaultView;
                 cbRecebeAno.DisplayMember = "ano";
             }
