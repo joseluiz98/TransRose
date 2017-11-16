@@ -63,7 +63,7 @@
             // 
             this.lbSelecioneAno.AutoSize = true;
             this.lbSelecioneAno.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbSelecioneAno.ForeColor = System.Drawing.SystemColors.Window;
+            this.lbSelecioneAno.ForeColor = System.Drawing.SystemColors.MenuText;
             this.lbSelecioneAno.Location = new System.Drawing.Point(33, 218);
             this.lbSelecioneAno.Name = "lbSelecioneAno";
             this.lbSelecioneAno.Size = new System.Drawing.Size(236, 24);
@@ -83,9 +83,8 @@
             // btSair
             // 
             this.btSair.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btSair.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btSair.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F);
-            this.btSair.ForeColor = System.Drawing.SystemColors.Window;
+            this.btSair.ForeColor = System.Drawing.SystemColors.MenuText;
             this.btSair.Location = new System.Drawing.Point(357, 527);
             this.btSair.Name = "btSair";
             this.btSair.Size = new System.Drawing.Size(75, 23);
@@ -97,9 +96,9 @@
             // btEntrar
             // 
             this.btEntrar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btEntrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btEntrar.BackColor = System.Drawing.SystemColors.Control;
             this.btEntrar.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F);
-            this.btEntrar.ForeColor = System.Drawing.SystemColors.Window;
+            this.btEntrar.ForeColor = System.Drawing.SystemColors.MenuText;
             this.btEntrar.Location = new System.Drawing.Point(12, 527);
             this.btEntrar.Name = "btEntrar";
             this.btEntrar.Size = new System.Drawing.Size(75, 23);
@@ -111,7 +110,7 @@
             // lbVersão
             // 
             this.lbVersão.AutoSize = true;
-            this.lbVersão.ForeColor = System.Drawing.SystemColors.Window;
+            this.lbVersão.ForeColor = System.Drawing.SystemColors.MenuText;
             this.lbVersão.Location = new System.Drawing.Point(0, 0);
             this.lbVersão.Name = "lbVersão";
             this.lbVersão.Size = new System.Drawing.Size(47, 13);
