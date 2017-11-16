@@ -90,6 +90,7 @@
         private ToolStripMenuItem importarRegistrosToolStripMenuItem;
         private PictureBox ultimoRegistro;
         private static manipulaArquivos contexto;
+        private Label lbContextoAtual;
         public static bool clicouSair;
 
         public VerCadastros()
@@ -180,6 +181,7 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.picLogoTransRose = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.lbContextoAtual = new System.Windows.Forms.Label();
             this.Menu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.atualizaCliente)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.buscarRegistro)).BeginInit();
@@ -856,7 +858,7 @@
             this.picLogoTransRose.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.picLogoTransRose.Image = ((System.Drawing.Image)(resources.GetObject("picLogoTransRose.Image")));
             this.picLogoTransRose.InitialImage = ((System.Drawing.Image)(resources.GetObject("picLogoTransRose.InitialImage")));
-            this.picLogoTransRose.Location = new System.Drawing.Point(451, 35);
+            this.picLogoTransRose.Location = new System.Drawing.Point(451, 40);
             this.picLogoTransRose.Name = "picLogoTransRose";
             this.picLogoTransRose.Size = new System.Drawing.Size(457, 102);
             this.picLogoTransRose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -872,12 +874,24 @@
             this.pictureBox3.TabIndex = 15;
             this.pictureBox3.TabStop = false;
             // 
+            // lbContextoAtual
+            // 
+            this.lbContextoAtual.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbContextoAtual.AutoSize = true;
+            this.lbContextoAtual.Font = new System.Drawing.Font("Gill Sans MT", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbContextoAtual.Location = new System.Drawing.Point(600, 30);
+            this.lbContextoAtual.Name = "lbContextoAtual";
+            this.lbContextoAtual.Size = new System.Drawing.Size(262, 18);
+            this.lbContextoAtual.TabIndex = 112;
+            this.lbContextoAtual.Text = "Você está trabalhando no contexto do ano de ";
+            // 
             // VerCadastros
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(984, 762);
+            this.Controls.Add(this.lbContextoAtual);
             this.Controls.Add(this.txtTotalAno);
             this.Controls.Add(this.txtParcela);
             this.Controls.Add(this.atualizaCliente);
@@ -1172,6 +1186,7 @@
                 OleDbCommand command = new OleDbCommand(cmdText, connection);
                 connection.Open();
                 OleDbDataReader reader = command.ExecuteReader();
+                this.lbContextoAtual.Text += contexto.ano;
                 try
                 {
                     while (reader.Read())
