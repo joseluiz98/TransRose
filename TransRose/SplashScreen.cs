@@ -64,7 +64,7 @@
             this.lbSelecioneAno.AutoSize = true;
             this.lbSelecioneAno.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbSelecioneAno.ForeColor = System.Drawing.SystemColors.MenuText;
-            this.lbSelecioneAno.Location = new System.Drawing.Point(33, 218);
+            this.lbSelecioneAno.Location = new System.Drawing.Point(20, 240);
             this.lbSelecioneAno.Name = "lbSelecioneAno";
             this.lbSelecioneAno.Size = new System.Drawing.Size(236, 24);
             this.lbSelecioneAno.TabIndex = 4;
@@ -72,7 +72,9 @@
             // 
             // cbRecebeAno
             // 
+            this.cbRecebeAno.BackColor = System.Drawing.SystemColors.Control;
             this.cbRecebeAno.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cbRecebeAno.ForeColor = System.Drawing.SystemColors.MenuText;
             this.cbRecebeAno.FormattingEnabled = true;
             this.cbRecebeAno.Location = new System.Drawing.Point(270, 298);
             this.cbRecebeAno.Name = "cbRecebeAno";
@@ -83,6 +85,7 @@
             // btSair
             // 
             this.btSair.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btSair.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btSair.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F);
             this.btSair.ForeColor = System.Drawing.SystemColors.MenuText;
             this.btSair.Location = new System.Drawing.Point(357, 527);
@@ -97,6 +100,7 @@
             // 
             this.btEntrar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btEntrar.BackColor = System.Drawing.SystemColors.Control;
+            this.btEntrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btEntrar.Font = new System.Drawing.Font("MS Reference Sans Serif", 8.25F);
             this.btEntrar.ForeColor = System.Drawing.SystemColors.MenuText;
             this.btEntrar.Location = new System.Drawing.Point(12, 527);
@@ -123,7 +127,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(444, 562);
             this.Controls.Add(this.lbVersão);
             this.Controls.Add(this.btEntrar);
