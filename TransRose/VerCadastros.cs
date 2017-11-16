@@ -780,7 +780,7 @@
             this.ultimoRegistro.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.ultimoRegistro.Cursor = System.Windows.Forms.Cursors.Hand;
             this.ultimoRegistro.Image = global::TransRose.Properties.Resources.last_row;
-            this.ultimoRegistro.Location = new System.Drawing.Point(694, 711);
+            this.ultimoRegistro.Location = new System.Drawing.Point(694, 706);
             this.ultimoRegistro.Name = "ultimoRegistro";
             this.ultimoRegistro.Size = new System.Drawing.Size(83, 44);
             this.ultimoRegistro.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
